@@ -28,6 +28,7 @@ slprj/
 codegen/
 simulink/*.mat
 simulink/**/hpt_sac_trajectory.mat
+legacy/tuition_intermediate/topology_2/*_before_rebuild_*.slx
 
 # OS / editor / local agent tooling
 .DS_Store
