@@ -23,3 +23,7 @@ The final root view separates the transformer-related teaching blocks into:
   path for the energy converter.
 - `SeriesTransformer`: W5/W6 series injection transformer path for the
   regulating converter.
+
+`SeriesTransformer` exposes only physical power ports at the root level. Its
+current and voltage measurement signals are hidden with Simulink `Goto`/`From`
+tags and collected inside `MeasurementAndLogging`.

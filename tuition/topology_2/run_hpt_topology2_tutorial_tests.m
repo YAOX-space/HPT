@@ -139,6 +139,21 @@ for k = 1:3
     checks(end + 1) = sprintf('%s present=%d', tpfName, tpfPresent);
 end
 
+series = [model '/SeriesTransformer'];
+seriesPh = get_param(series, 'PortHandles');
+seriesMeasurementPortsHidden = isempty(seriesPh.Outport);
+seriesMeasurementTagsPresent = countTaggedBlocks(series, 'Goto', 'Series_') == 12;
+loggingMeasurementTagsPresent = countTaggedBlocks([model '/MeasurementAndLogging'], ...
+    'From', 'Series_') == 12;
+ok = ok && seriesMeasurementPortsHidden && seriesMeasurementTagsPresent ...
+    && loggingMeasurementTagsPresent;
+checks(end + 1) = sprintf('SeriesTransformer measurement outports hidden=%d', ...
+    seriesMeasurementPortsHidden);
+checks(end + 1) = sprintf('SeriesTransformer measurement Goto tags present=%d', ...
+    seriesMeasurementTagsPresent);
+checks(end + 1) = sprintf('MeasurementAndLogging measurement From tags present=%d', ...
+    loggingMeasurementTagsPresent);
+
 energy = [model '/EnergyConverter'];
 if ~isempty(find_system(model, 'SearchDepth', 1, 'Name', 'EnergyConverter'))
     ePh = get_param(energy, 'PortHandles');
@@ -169,6 +184,17 @@ function ok = portsConnected(portHandles)
 ok = true;
 for h = reshape(portHandles, 1, [])
     ok = ok && get_param(h, 'Line') ~= -1;
+end
+end
+
+function count = countTaggedBlocks(systemPath, blockType, tagPrefix)
+blocks = find_system(systemPath, 'SearchDepth', 1, 'BlockType', blockType);
+count = 0;
+for k = 1:numel(blocks)
+    tag = get_param(blocks{k}, 'GotoTag');
+    if startsWith(tag, tagPrefix)
+        count = count + 1;
+    end
 end
 end
 

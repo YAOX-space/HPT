@@ -55,6 +55,8 @@ create_named_subsystem_if_needed(model, 'MeasurementAndLogging', { ...
     'Series_W6_Vabc_mux', 'Series_W6_Vabc', ...
     'Vinj_abc_mux', 'Vinj_abc', 'Idc_cap'});
 
+hide_series_measurement_ports(model);
+rename_series_power_ports(model);
 apply_teaching_layout(model);
 add_or_update_annotation(model);
 set_param(model, 'SimulationCommand', 'update');
@@ -112,6 +114,229 @@ if numel(newHandles) ~= 1
         subsystemName, numel(newHandles));
 end
 set_param(newHandles(1), 'Name', subsystemName, 'ShowName', 'on');
+end
+
+function hide_series_measurement_ports(model)
+st = [model '/SeriesTransformer'];
+ml = [model '/MeasurementAndLogging'];
+if getSimulinkBlockHandle(st) <= 0 || getSimulinkBlockHandle(ml) <= 0
+    return;
+end
+
+measurements = {
+    'Reg_I_1', 'Series_Reg_I_A';
+    'Reg_I_2', 'Series_Reg_I_B';
+    'Reg_I_3', 'Series_Reg_I_C';
+    'SwW6_V_1', 'Series_W6_V_A';
+    'SwW6_V_2', 'Series_W6_V_B';
+    'SwW6_V_3', 'Series_W6_V_C';
+    'HBC_Cap_V_1', 'Series_HBC_Cap_V_A';
+    'HBC_Cap_V_2', 'Series_HBC_Cap_V_B';
+    'HBC_Cap_V_3', 'Series_HBC_Cap_V_C';
+    'SwW5_V_1', 'Series_W5_V_A';
+    'SwW5_V_2', 'Series_W5_V_B';
+    'SwW5_V_3', 'Series_W5_V_C'};
+
+items = struct('SourceBlock', {}, 'Tag', {}, 'OutportBlock', {}, ...
+    'MlInportBlock', {}, 'MlDstBlocks', {}, 'MlDstPorts', {});
+for i = 1:size(measurements, 1)
+    item = capture_measurement_path(st, ml, measurements{i, 1}, measurements{i, 2});
+    if ~isempty(item)
+        items(end + 1) = item; %#ok<AGROW>
+    end
+end
+
+for i = 1:numel(items)
+    replace_logging_inport_with_from(ml, items(i));
+end
+for i = 1:numel(items)
+    replace_series_outport_with_goto(st, items(i));
+end
+end
+
+function item = capture_measurement_path(st, ml, sourceName, tag)
+item = [];
+sourcePath = [st '/' sourceName];
+if getSimulinkBlockHandle(sourcePath) <= 0
+    return;
+end
+sourcePh = get_param(sourcePath, 'PortHandles');
+if isempty(sourcePh.Outport)
+    return;
+end
+sourceLine = get_param(sourcePh.Outport(1), 'Line');
+if sourceLine == -1
+    return;
+end
+
+dstBlocks = get_param(sourceLine, 'DstBlockHandle');
+outportBlock = '';
+for k = 1:numel(dstBlocks)
+    if dstBlocks(k) ~= -1 && strcmp(get_param(dstBlocks(k), 'BlockType'), 'Outport')
+        outportBlock = getfullname(dstBlocks(k));
+        break;
+    end
+end
+if isempty(outportBlock)
+    return;
+end
+
+outportNumber = str2double(get_param(outportBlock, 'Port'));
+stPh = get_param(st, 'PortHandles');
+if outportNumber > numel(stPh.Outport)
+    return;
+end
+rootLine = get_param(stPh.Outport(outportNumber), 'Line');
+mlPortNumber = [];
+if rootLine ~= -1
+    dstPorts = get_param(rootLine, 'DstPortHandle');
+    for k = 1:numel(dstPorts)
+        if dstPorts(k) ~= -1 && strcmp(get_param(dstPorts(k), 'Parent'), ml)
+            mlPortNumber = get_param(dstPorts(k), 'PortNumber');
+            break;
+        end
+    end
+end
+if isempty(mlPortNumber)
+    return;
+end
+
+mlInportBlock = find_inport_by_number(ml, mlPortNumber);
+if isempty(mlInportBlock)
+    return;
+end
+
+mlPh = get_param(mlInportBlock, 'PortHandles');
+mlLine = get_param(mlPh.Outport(1), 'Line');
+if mlLine == -1
+    return;
+end
+mlDstPorts = get_param(mlLine, 'DstPortHandle');
+dstBlockPaths = {};
+dstPortNumbers = [];
+for k = 1:numel(mlDstPorts)
+    if mlDstPorts(k) ~= -1
+        dstBlockPaths{end + 1} = get_param(mlDstPorts(k), 'Parent'); %#ok<AGROW>
+        dstPortNumbers(end + 1) = get_param(mlDstPorts(k), 'PortNumber'); %#ok<AGROW>
+    end
+end
+if isempty(dstBlockPaths)
+    return;
+end
+
+item.SourceBlock = sourcePath;
+item.Tag = tag;
+item.OutportBlock = outportBlock;
+item.MlInportBlock = mlInportBlock;
+item.MlDstBlocks = dstBlockPaths;
+item.MlDstPorts = dstPortNumbers;
+end
+
+function replace_logging_inport_with_from(ml, item)
+fromPath = [ml '/F_' item.Tag];
+if getSimulinkBlockHandle(fromPath) <= 0
+    pos = get_param(item.MlInportBlock, 'Position');
+    add_block('simulink/Signal Routing/From', fromPath, ...
+        'GotoTag', item.Tag, ...
+        'Position', [pos(1) pos(2) pos(1) + 45 pos(2) + 20], ...
+        'ShowName', 'off');
+else
+    set_param(fromPath, 'GotoTag', item.Tag, 'ShowName', 'off');
+end
+
+if getSimulinkBlockHandle(item.MlInportBlock) > 0
+    ph = get_param(item.MlInportBlock, 'PortHandles');
+    line = get_param(ph.Outport(1), 'Line');
+    if line ~= -1
+        delete_line(line);
+    end
+    delete_block(item.MlInportBlock);
+end
+
+fromPh = get_param(fromPath, 'PortHandles');
+for k = 1:numel(item.MlDstBlocks)
+    dstPh = get_param(item.MlDstBlocks{k}, 'PortHandles');
+    dstPort = dstPh.Inport(item.MlDstPorts(k));
+    if get_param(dstPort, 'Line') == -1
+        add_line(ml, fromPh.Outport(1), dstPort, 'autorouting', 'on');
+    end
+end
+end
+
+function replace_series_outport_with_goto(st, item)
+gotoPath = [st '/G_' item.Tag];
+if getSimulinkBlockHandle(gotoPath) <= 0
+    pos = get_param(item.SourceBlock, 'Position');
+    add_block('simulink/Signal Routing/Goto', gotoPath, ...
+        'GotoTag', item.Tag, ...
+        'TagVisibility', 'global', ...
+        'Position', [pos(3) + 35 pos(2) pos(3) + 90 pos(2) + 20], ...
+        'ShowName', 'off');
+else
+    set_param(gotoPath, 'GotoTag', item.Tag, ...
+        'TagVisibility', 'global', 'ShowName', 'off');
+end
+
+sourcePh = get_param(item.SourceBlock, 'PortHandles');
+sourceLine = get_param(sourcePh.Outport(1), 'Line');
+if sourceLine ~= -1
+    delete_line(sourceLine);
+end
+if getSimulinkBlockHandle(item.OutportBlock) > 0
+    delete_block(item.OutportBlock);
+end
+
+gotoPh = get_param(gotoPath, 'PortHandles');
+if get_param(gotoPh.Inport(1), 'Line') == -1
+    add_line(st, sourcePh.Outport(1), gotoPh.Inport(1), 'autorouting', 'on');
+end
+end
+
+function block = find_inport_by_number(systemPath, portNumber)
+block = '';
+inports = find_system(systemPath, 'SearchDepth', 1, 'BlockType', 'Inport');
+for k = 1:numel(inports)
+    if str2double(get_param(inports{k}, 'Port')) == portNumber
+        block = inports{k};
+        return;
+    end
+end
+end
+
+function rename_series_power_ports(model)
+st = [model '/SeriesTransformer'];
+if getSimulinkBlockHandle(st) <= 0
+    return;
+end
+
+leftNames = {'LV_in_A', 'LV_in_B', 'LV_in_C', 'Hbridge_return_ref', ...
+    'W5_to_Hbridge_A_pos', 'W5_to_Hbridge_B_pos', 'W5_to_Hbridge_C_pos'};
+rightNames = {'LV_out_A', 'LV_out_B', 'LV_out_C', ...
+    'W5_to_Hbridge_A_neg', 'W5_to_Hbridge_B_neg', 'W5_to_Hbridge_C_neg'};
+
+rename_pmio_ports(st, 'Left', leftNames);
+rename_pmio_ports(st, 'Right', rightNames);
+end
+
+function rename_pmio_ports(systemPath, side, names)
+ports = find_system(systemPath, 'SearchDepth', 1, 'BlockType', 'PMIOPort');
+selected = {};
+ys = [];
+for k = 1:numel(ports)
+    if strcmp(get_param(ports{k}, 'Side'), side)
+        selected{end + 1} = ports{k}; %#ok<AGROW>
+        pos = get_param(ports{k}, 'Position');
+        ys(end + 1) = pos(2); %#ok<AGROW>
+    end
+end
+if numel(selected) ~= numel(names)
+    return;
+end
+
+[~, idx] = sort(ys);
+for k = 1:numel(idx)
+    set_param(selected{idx(k)}, 'Name', names{k}, 'ShowName', 'on');
+end
 end
 
 function apply_teaching_layout(model)
