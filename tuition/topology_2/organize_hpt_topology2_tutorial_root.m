@@ -2,9 +2,9 @@ function organize_hpt_topology2_tutorial_root(model)
 % Organize topology2 tutorial root level to match the topology1 teaching view.
 %
 % The root level should expose only the major conceptual blocks:
-% Grid, Zg, MeasMV, SeriesTransformer, ElectromagneticTransformer, MeasLV,
-% Load, RegulatingConverter, EnergyConverter, DCLink, DQControl,
-% MeasurementAndLogging, and powergui.
+% Grid, Zg, MeasMV, ElectromagneticTransformer, CouplingTransformer,
+% SeriesTransformer, MeasLV, Load, RegulatingConverter, EnergyConverter,
+% DCLink, DQControl, MeasurementAndLogging, and powergui.
 
 if nargin < 1
     model = 'hpt_topology2_tutorial';
@@ -17,7 +17,28 @@ end
 rename_block_if_present(model, 'Source_RL', 'Zg');
 rename_block_if_present(model, 'MeasPrimary', 'MeasMV');
 rename_block_if_present(model, 'MainTransformer', 'ElectromagneticTransformer');
-rename_block_if_present(model, 'CouplingAndInjection', 'SeriesTransformer');
+
+if isempty(find_system(model, 'SearchDepth', 1, 'Name', 'CouplingTransformer'))
+    expand_subsystem_if_present(model, 'SeriesTransformer');
+    expand_subsystem_if_present(model, 'CouplingAndInjection');
+end
+
+create_named_subsystem_if_needed(model, 'CouplingTransformer', { ...
+    'ParallelCoupled_1', 'ParallelCoupled_2', 'ParallelCoupled_3', ...
+    'S3_link_1', 'S3_link_2', 'S3_link_3', ...
+    'TPF_L_1', 'TPF_L_2', 'TPF_L_3', ...
+    'MeasEnergy', ...
+    'PCT_primary_neutral_ground', 'PCT_secondary_neutral_ground'});
+
+create_named_subsystem_if_needed(model, 'SeriesTransformer', { ...
+    'Reg_I_1', 'Reg_I_2', 'Reg_I_3', ...
+    'SwHBC_L_1', 'SwHBC_L_2', 'SwHBC_L_3', ...
+    'SwHBC_C_1', 'SwHBC_C_2', 'SwHBC_C_3', ...
+    'HBC_Cap_V_1', 'HBC_Cap_V_2', 'HBC_Cap_V_3', ...
+    'SwRegSeries_W5W6_1', 'SwRegSeries_W5W6_2', 'SwRegSeries_W5W6_3', ...
+    'SwW5_V_1', 'SwW5_V_2', 'SwW5_V_3', ...
+    'SwW6_V_1', 'SwW6_V_2', 'SwW6_V_3', ...
+    'HBC_return_ground'});
 
 create_named_subsystem_if_needed(model, 'DCLink', { ...
     'Cdc', 'MeasVdc', 'Chopper', 'Rchop', 'Chopper_gate', 'Chopper_cmp', ...
@@ -47,6 +68,19 @@ end
 oldPath = [model '/' oldName];
 if ~isempty(find_system(model, 'SearchDepth', 1, 'Name', oldName))
     set_param(oldPath, 'Name', newName);
+end
+end
+
+function expand_subsystem_if_present(model, subsystemName)
+path = [model '/' subsystemName];
+if getSimulinkBlockHandle(path) <= 0
+    return;
+end
+
+try
+    Simulink.BlockDiagram.expandSubsystem(path, 'CreateArea', 'off');
+catch ME
+    error('Could not expand %s before root regrouping: %s', subsystemName, ME.message);
 end
 end
 
@@ -85,8 +119,9 @@ set_pos(model, 'powergui', [520 210 590 235]);
 set_pos(model, 'Grid', [90 490 160 595]);
 set_pos(model, 'Zg', [205 510 270 585]);
 set_pos(model, 'MeasMV', [310 490 395 605]);
-set_pos(model, 'SeriesTransformer', [485 485 630 610]);
-set_pos(model, 'ElectromagneticTransformer', [770 485 920 615]);
+set_pos(model, 'ElectromagneticTransformer', [465 485 620 615]);
+set_pos(model, 'CouplingTransformer', [690 370 865 520]);
+set_pos(model, 'SeriesTransformer', [690 585 865 720]);
 set_pos(model, 'MeasLV', [965 490 1050 605]);
 set_pos(model, 'Load', [1130 505 1215 595]);
 set_pos(model, 'RegulatingConverter', [420 760 650 900]);
@@ -95,8 +130,9 @@ set_pos(model, 'EnergyConverter', [900 750 1075 900]);
 set_pos(model, 'DQControl', [690 1040 920 1185]);
 set_pos(model, 'MeasurementAndLogging', [1225 270 1390 395]);
 
-set_color(model, 'SeriesTransformer', 'cyan');
 set_color(model, 'ElectromagneticTransformer', 'lightBlue');
+set_color(model, 'CouplingTransformer', 'cyan');
+set_color(model, 'SeriesTransformer', 'lightBlue');
 set_color(model, 'RegulatingConverter', 'orange');
 set_color(model, 'EnergyConverter', 'green');
 set_color(model, 'DQControl', 'yellow');
@@ -120,7 +156,8 @@ end
 function add_or_update_annotation(model)
 text = sprintf(['Topology2 teaching view:\n', ...
     'MainTransformer is shown as ElectromagneticTransformer.\n', ...
-    'SeriesTransformer contains W5/W6 series injection and secondary energy coupling.\n', ...
+    'CouplingTransformer contains the secondary-side parallel energy coupling path.\n', ...
+    'SeriesTransformer contains only the W5/W6 series injection path.\n', ...
     'DCLink and MeasurementAndLogging hide implementation details.']);
 anns = find_system(model, 'FindAll', 'on', 'Type', 'annotation');
 for i = 1:numel(anns)
