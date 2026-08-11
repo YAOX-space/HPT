@@ -93,8 +93,21 @@ function [status, metric, details] = checkTopology(model)
 checks = strings(0);
 ok = true;
 
-requiredRoot = ["MainTransformer", "CouplingAndInjection", ...
-    "EnergyConverter", "RegulatingConverter"];
+expectedRoot = ["DCLink", "DQControl", "ElectromagneticTransformer", ...
+    "EnergyConverter", "Grid", "Load", "MeasLV", "MeasMV", ...
+    "MeasurementAndLogging", "RegulatingConverter", "SeriesTransformer", ...
+    "Zg", "powergui"];
+rootBlocks = string(get_param(find_system(model, 'SearchDepth', 1, ...
+    'Type', 'Block'), 'Name'));
+rootBlocks = sort(rootBlocks(:));
+expectedSorted = sort(expectedRoot(:));
+rootOk = isequal(rootBlocks, expectedSorted);
+ok = ok && rootOk;
+checks(end + 1) = sprintf('root has topology1-style 13 blocks=%d', rootOk);
+
+requiredRoot = ["ElectromagneticTransformer", "SeriesTransformer", ...
+    "EnergyConverter", "RegulatingConverter", "DCLink", "DQControl", ...
+    "MeasurementAndLogging", "MeasMV"];
 for name = requiredRoot
     present = ~isempty(find_system(model, 'SearchDepth', 1, 'Name', char(name)));
     ok = ok && present;
@@ -113,9 +126,12 @@ for k = 1:3
     seriesName = sprintf('SwRegSeries_W5W6_%d', k);
     pctName = sprintf('ParallelCoupled_%d', k);
     tpfName = sprintf('TPF_L_%d', k);
-    seriesPresent = ~isempty(find_system(model, 'LookUnderMasks', 'all', 'Name', seriesName));
-    pctPresent = ~isempty(find_system(model, 'LookUnderMasks', 'all', 'Name', pctName));
-    tpfPresent = ~isempty(find_system(model, 'LookUnderMasks', 'all', 'Name', tpfName));
+    seriesPresent = ~isempty(find_system([model '/SeriesTransformer'], ...
+        'LookUnderMasks', 'all', 'Name', seriesName));
+    pctPresent = ~isempty(find_system([model '/SeriesTransformer'], ...
+        'LookUnderMasks', 'all', 'Name', pctName));
+    tpfPresent = ~isempty(find_system([model '/SeriesTransformer'], ...
+        'LookUnderMasks', 'all', 'Name', tpfName));
     ok = ok && seriesPresent && pctPresent && tpfPresent;
     checks(end + 1) = sprintf('%s present=%d', seriesName, seriesPresent);
     checks(end + 1) = sprintf('%s present=%d', pctName, pctPresent);
