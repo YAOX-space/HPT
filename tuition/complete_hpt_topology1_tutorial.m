@@ -4,7 +4,9 @@
 model = 'hpt_topology1_tutorial';
 tuitionDir = fileparts(mfilename('fullpath'));
 mdlPath = fullfile(tuitionDir, [model '.slx']);
-backupPath = fullfile(tuitionDir, [model '_before_step16_w3_alignment.slx']);
+repoRoot = fileparts(tuitionDir);
+archiveDir = fullfile(repoRoot, 'legacy', 'tuition_intermediate');
+backupPath = fullfile(archiveDir, [model '_before_step16_w3_alignment.slx']);
 
 fprintf('Tutorial directory: %s\n', tuitionDir);
 fprintf('Tutorial model path: %s\n', mdlPath);
@@ -14,6 +16,9 @@ if ~isfile(mdlPath)
 end
 
 if ~isfile(backupPath)
+    if ~isfolder(archiveDir)
+        mkdir(archiveDir);
+    end
     copyfile(mdlPath, backupPath);
 end
 
