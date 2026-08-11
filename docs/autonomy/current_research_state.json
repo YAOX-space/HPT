@@ -1,0 +1,99 @@
+{
+  "schema": "hpt-v2-current-research-state-v2",
+  "updated_at": "2026-08-10",
+  "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+  "training_target_gate": "L1",
+  "claim_scope": {
+    "promoted": "No controller is currently promoted under the v3 validator.",
+    "legacy_promoted": "The topology2 A-phase deep-LVRT r6 actor remains historical pre-v3 evidence only.",
+    "not_promoted": [
+      "L2 GB/T ride-through compliance",
+      "L3 full FRT compliance",
+      "Global SAC superiority over conventional dq",
+      "Transfer across all twelve fault families"
+    ]
+  },
+  "controller_contract": {
+    "observation_dim": 24,
+    "action_dim": 4,
+    "actions": ["m_reg_d", "m_reg_q", "m_energy_d", "m_energy_q"],
+    "one_checkpoint_per_family": true,
+    "per_case_actor_or_runtime_selector": false
+  },
+  "active_artifacts": {
+    "promoted_controller": null,
+    "current_fault_proxy": "diagnostic_only:experts/topology2_single_phase_lvrt/proxy/model/hpt_proxy_calibration_plus_fixed72.json",
+    "current_training_dataset": "diagnostic_proxy2_smoke:experts/topology2_single_phase_lvrt/data/proxy2_transition/proxy2_t2sp_lvrt_phase_a_4case_20260804; reduced Phase-A 4-case data only, not a promoted family dataset",
+    "current_family_matrix": "experts/topology2_single_phase_lvrt/results/v3_t2sp105_deep_dq_boundary_r1/strong_dq_family_rows.csv",
+    "status": "no_promoted_controller; proxy72 is diagnostic; proxy2 timestep-transition smoke, DAgger repair, and SAC actor-update diagnostic completed on a reduced 4-case Phase-A matrix"
+  },
+  "legacy_archive": {
+    "manifest": "archive/pre_gbt_v3_20260803/archive_manifest.json",
+    "legacy_actor": "experts/topology2_single_phase_lvrt/archive/pre_gbt_v3_20260803/models/hpt_t2_a_lvrt_joint_support_family_sac_r6_20260803.zip",
+    "status": "stale_read_only_do_not_promote"
+  },
+  "validator_migration": {
+    "pcc_gate": "GB/T 19963.1-2021 voltage-time envelope evaluated only at the PCC",
+    "load_quality_gate": "Project-defined 176-238 V fault band and +/-7% recovery band",
+    "l1": "Load quality, DC-link bounds, action bounds, and post-inception grid-current limit",
+    "l2": "L1 plus valid PCC test, explicit remained-connected evidence, and equipment safety",
+    "l3": "L2 plus reactive support and active-power recovery",
+    "currently_trainable": ["L1"],
+    "unavailable_evidence": [
+      "explicit trip or breaker connection state",
+      "active-power recovery evaluator"
+    ]
+  },
+  "conventional_baseline": {
+    "profile": "tuned_v2_l1",
+    "status": "topology2_fixed_plant_smoke_qualified_full_matrix_pending",
+    "topology2_parameters": {
+      "source": "t2_v3_l1_energy015_fixed_plant",
+      "energy_scale": 0.15,
+      "plant_hardware_changed": false,
+      "lvrt_0p90_60ms_l1_pass": true,
+      "hvrt_1p10_60ms_l1_pass": false,
+      "hvrt_failure": "dc_link_bounds"
+    },
+    "ranking_rule": "Only current-schema rows with scenario_valid=true are eligible; rank by L1 pass count before quality score."
+  },
+  "evidence": {
+    "v3_smoke": "results/gbt19963_revalidation_smoke",
+    "baseline_tuning": "results/conventional_dq_tuning/gbt_v3_t2_l1_fixedplant_energy_sweep_20260803",
+    "legacy_matrices": "archived_pre_gbt_v3",
+    "topology2_single_phase_lvrt_smoke_27": "experts/topology2_single_phase_lvrt/results/v3_t2sp27_dq_smoke_r1",
+    "topology2_single_phase_lvrt_shallow_108": "experts/topology2_single_phase_lvrt/results/v3_t2sp108_dq_boundary_r1",
+    "topology2_single_phase_lvrt_deep_105": "experts/topology2_single_phase_lvrt/results/v3_t2sp105_deep_dq_boundary_r1",
+    "topology2_single_phase_lvrt_proxy_seed_alignment": "experts/topology2_single_phase_lvrt/proxy/alignment/v3_t2sp105_deep_dq_seed",
+    "topology2_single_phase_lvrt_fixed72_proxy": "experts/topology2_single_phase_lvrt/proxy/model/hpt_proxy_calibration_plus_fixed72.json",
+    "topology2_single_phase_lvrt_phase_a_filled_boundary": "experts/topology2_single_phase_lvrt/results/combined_strong_dq_boundary_20260804/analysis_matrix_phase_a_filled",
+    "topology2_single_phase_lvrt_q_holdout_alignment": "experts/topology2_single_phase_lvrt/proxy/alignment/v3_t2sp_q_holdout_r2_plus_fixed72_model_v3",
+    "topology2_single_phase_lvrt_first_sac_training": "experts/topology2_single_phase_lvrt/results/training/v3_t2sp_l1_family_sac_proxy72_r1",
+    "topology2_single_phase_lvrt_first_sac_switch_check": "experts/topology2_single_phase_lvrt/results/v3_t2sp_l1_family_sac_proxy72_r1_switch12",
+    "topology2_single_phase_lvrt_proxy2_transition_smoke": "experts/topology2_single_phase_lvrt/data/proxy2_transition/proxy2_t2sp_lvrt_phase_a_4case_20260804",
+    "topology2_single_phase_lvrt_proxy2_pilot_alignment": "experts/topology2_single_phase_lvrt/proxy/proxy2_transition/proxy2_t2sp_lvrt_phase_a_4case_20260804",
+    "topology2_single_phase_lvrt_dagger4_reduced_switch_check": "experts/topology2_single_phase_lvrt/results/p2dagger4_4case_chk_r1",
+    "topology2_single_phase_lvrt_sac_actor_update_training_diagnostic": "experts/topology2_single_phase_lvrt/results/training/p2sacdiag4_actorupd_20260804",
+    "topology2_single_phase_lvrt_sac_actor_update_switch_diagnostic": "experts/topology2_single_phase_lvrt/results/p2sacdiag4_actorupd_4case_chk_r1"
+  },
+  "next_research_gate": [
+    "Treat fixed-action proxy72 and the reduced 4-case SAC actor-update run as diagnostic only; do not use either as the main family-level SAC claim.",
+    "Expand the proxy-2.0 timestep transition dataset from the reduced 4-case Phase-A smoke to a declared train/validation/holdout family split using strong-dq trajectories, accepted expert trajectories, and small perturbations around them.",
+    "Split the timestep transition data into calibration, validation, and untouched holdout sets before any new SAC claim.",
+    "Integrate the proxy-2.0 transition model into the SAC environment; the current SAC diagnostic still used the legacy averaged proxy path.",
+    "Only after proxy-2.0 transition, short-rollout, reward/pass-fail, and trajectory-ranking checks align with Simulink should the next family-level SAC candidate be trained and promoted.",
+    "Promote only an unchanged checkpoint that expands the L1 boundary over the same tuned_v2_l1 evaluator path."
+  ],
+  "canonical_paths": {
+    "expert_registry": "experts/registry.json",
+    "expert_workspace_resolver": "sac/expert_workspace.py",
+    "gate_contract": "sac/gate_contract.py",
+    "family_campaign": "sac/campaigns/run_hpt_family_specialist_matrix.py",
+    "proxy_environment": "sac/hpt_voltage_sac_env.py",
+    "sac_trainer": "sac/offline/train_hpt_voltage_sac.py",
+    "switch_validator": "simulink/evaluators/eval_hpt_v2_control_comparison.m",
+    "topology1_model": "simulink/topology1/hpt_v2_1to1_switchlevel.slx",
+    "topology2_model": "simulink/topology2/hpt_v2_topology2_paper.slx",
+    "research_log": "docs/autonomy/logs/research_log.md"
+  }
+}

@@ -1,0 +1,5 @@
+model,target,rmse,mae
+proxy2_transition_autoregressive,lv_pu_inst,0.021554360268476496,0.01764948260153054
+proxy2_transition_autoregressive,vdc_pu_inst,0.09862280865645155,0.08560662290909891
+proxy2_transition_autoregressive,obs_01,0.017719248985202975,0.015369183099702243
+proxy2_transition_autoregressive,obs_04,0.0986228086564502,0.08560662290909825

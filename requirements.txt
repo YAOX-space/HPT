@@ -1,0 +1,11 @@
+# Pinned to the verified working environment (see docs/FILE_GUIDE.md / env recovery notes).
+# Python 3.8. numpy<2 (scipy 1.10 needs it; SAC .zip were saved under numpy2 -> load via
+# custom_objects in src/hpt_frt/network/sac_wrapper.py). Install: pip install -r requirements.txt
+numpy==1.24.4
+scipy==1.10.1
+pandas==2.0.3
+matplotlib==3.7.5
+gymnasium==1.0.0
+stable-baselines3==2.4.1
+torch==2.4.1
+opendssdirect.py==0.9.4

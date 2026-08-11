@@ -1,0 +1,26 @@
+{
+  "schema": "hpt-proxy2-transition-pilot-summary-v1",
+  "trace_csv": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\data\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\aggregates\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\aggregate_trace.csv",
+  "out_dir": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804",
+  "num_source_rows": 504,
+  "num_transitions": 500,
+  "num_traces": 4,
+  "train_traces": 3,
+  "holdout_trace": "trajectory_trace_topology2_dqseed_t2_single_phase_lvrt_a_pu0900_d120ms_20260804_153130.csv",
+  "train_transitions": 360,
+  "holdout_transitions": 140,
+  "feature_dim": 42,
+  "target_dim": 26,
+  "one_step_metrics_csv": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_one_step_metrics.csv",
+  "rollout_metrics_csv": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_rollout_metrics.csv",
+  "rollout_csv": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_holdout_rollout.csv",
+  "rollout_plot": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_holdout_rollout.png",
+  "model_path": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_transition_model.joblib",
+  "lite_proxy2": {
+    "one_step_metrics_csv": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_lite_one_step_metrics.csv",
+    "rollout_metrics_csv": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_lite_rollout_metrics.csv",
+    "rollout_csv": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_lite_holdout_rollout.csv",
+    "rollout_plot": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_lite_holdout_rollout.png",
+    "model_path": "E:\\research_space\\HPT2.0\\experts\\topology2_single_phase_lvrt\\proxy\\proxy2_transition\\proxy2_t2sp_lvrt_phase_a_4case_20260804\\proxy2_lite_transition_model.joblib"
+  }
+}

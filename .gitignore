@@ -1,0 +1,46 @@
+# Large or generated data
+data/
+archive/legacy_data/**
+!archive/legacy_data/README.md
+!archive/legacy_data/inventory.csv
+experts/*/results/*/
+legacy/hpt_frt/network/results/
+.venv/
+lab/results/
+tmp/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# MATLAB / Simulink generated files
+slprj/
+*.asv
+*.autosave
+*.slxc
+*.slx.r*
+codegen/
+simulink/*.mat
+simulink/**/hpt_sac_trajectory.mat
+
+# OS / editor / local agent tooling
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+.codex/
+
+# Local extraction and LaTeX build artifacts
+lab/tmp_*/
+lab/tmp_*.txt
+references/**/extracted_text/
+tex/*.aux
+tex/*.log

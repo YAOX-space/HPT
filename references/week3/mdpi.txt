@@ -1,0 +1,986 @@
+mathematics
+
+Article
+Operation Assessment of a Hybrid Distribution Transformer Compensating for Voltage and Power Factor Using Predictive Control
+Esteban I. Marciel 1 , Carlos R. Baier 2,* , Roberto O. Ramírez 2 , Carlos A. Muñoz 2,3 , Marcelo A. Pérez 4 and Mauricio Arevalo 5
+
+1 Engineering Systems Doctoral Program, Faculty of Engineering, University of Talca, Campus Curicó, Curicó 3344158, Chile; esteban.marciel@utalca.cl
+2 Department of Electrical Engineering, Faculty of Engineering, University of Talca, Campus Curicó, Curicó 3344158, Chile; roramirez@utalca.cl (R.O.R.); carlosmunoz@utalca.cl or camc0001@red.ujaen.es (C.A.M.)
+3 Estudiante de Doctorado, Departamento de Ingeniería Eléctrica, University of Jaén, Campus Lagunillas s/n, Building A3, 23071 Jaén, Spain
+4 Department of Electronics, Universidad Tecnica Federico Santa Maria, Valparaiso 2390123, Chile; marcelo.perez@usm.cl
+5 Electrical Engineering Sciences Doctoral Program, Faculty of Engineering, University of Talca, Campus Curicó, Curicó 3344158, Chile; mauricio.arevalo@utalca.cl
+* Correspondence: cbaier@utalca.cl
+
+Citation: Marciel, E.I.; Baier, C.R.; Ramirez, R.O.; Muñoz, C.A.; Perez, M.A.; Arevalo, M. Operation Assessment of a Hybrid Distribution Transformer Compensating for Voltage and Power Factor Using Predictive Control. Mathematics 2024, 12, 774. https://doi.org/10.3390/ math12050774
+Academic Editors: Eduard Petlenkov and Larbi Chrifi-Alaoui
+
+Abstract: Hybrid Distribution Transformers (HDTs) offer a compelling alternative to traditional lowfrequency transformers (LFTs), providing auxiliary services in addition to standard functionalities. By integrating LFTs with power converters, HDTs enhance the operational capabilities of the system. The specific configuration in which converters are connected to the transformer allows for the provision of multiple services. This can not only prevent network failures but also extend the lifespan of its components, an outcome that is highly desirable in a distribution grid. This article discusses an HDT developed to mitigate voltage fluctuations in the grid and to decrease the reactive power drawn from the secondary side of traditional LFTs. A finite-control-set model predictive control (FCS-MPC), in conjunction with linear controllers, is utilized for the effective management of the HDT converters. Two separate control loops are established to regulate voltage and reactive power on the secondary side of the transformer. Results from Hardware-in-the-Loop (HIL) testing affirm the proficiency of HDT in reducing grid voltage variations by 15% and in cutting reactive power consumption by up to 94%. The adopted control strategy and topology are demonstrated to be effective in stabilizing voltage and reactive power fluctuations while concurrently facilitating the charging of the converters’ DC link directly from the grid.
+Keywords: hybrid distribution transformer; smart transformer; smart grids; CHB-MLI
+
+Received: 5 February 2024 Revised: 29 February 2024 Accepted: 1 March 2024 Published: 5 March 2024
+
+MSC: 93-10
+
+Copyright: © 2024 by the authors. Licensee MDPI, Basel, Switzerland. This article is an open access article distributed under the terms and conditions of the Creative Commons Attribution (CC BY) license (https:// creativecommons.org/licenses/by/ 4.0/).
+
+1. Introduction
+In electrical power distribution systems, one of the primary goals is to maintain voltage and current under control at various points within the grid. This ensures the grid’s capacity to provide a supply of energy that meets the quality standards set by regulatory limits, thereby reducing the likelihood of failures in these systems. Operating outside the nominal values for voltage amplitude or frequency can compromise the proper functioning or integrity of equipment connected to the grid [1]. These potential failures pose significant challenges in distribution systems control due to the vast number and variety of connected elements [2].
+
+Mathematics 2024, 12, 774. https://doi.org/10.3390/math12050774
+
+https://www.mdpi.com/journal/mathematics
+
+Mathematics 2024, 12, 774
+
+2 of 18
+Distribution transformers, key components in electrical distribution systems, interface between medium- and low-voltage grids, reducing voltage for consumer use. While known for their robustness and cost-effectiveness [3], these static devices cannot reduce current and voltage fluctuations.
+Non-linear loads, renewable energy systems, and electric vehicles destabilize electrical networks, affecting supply quality [4]. Fluctuations and harmonics can overheat transformers, reducing lifespan and efficiency [5]. While load tap changers (LTCs) regulate voltage, they falter with rapid changes due to mechanical limitations [6]. Active filters based on power electronics offer a faster, broader operational solution compared to passive or mechanical methods [7]. However, challenges like harmonics in load currents and diverse reactive power demands still strain transformers, risking overheating and reduced lifespan [8].
+Solid-state transformers (SSTs) emerge as a future solution in electrical systems, replacing traditional transformers or LFTs. SSTs, incorporating power converters at both the input and output, manage energy transfer through a medium-frequency transformer (MFT), aligning the output with grid voltages and frequencies, thereby enabling the use of higher power density transformers [9]. While offering complete control over voltage and current [10], SSTs face limitations in efficiency due to the necessity of all power flowing through at least two converters, resulting in lower efficiency and higher construction costs compared to LFTs [11,12].
+Addressing the limitations of solid-state transformers (SSTs) and seeking to maintain controllability in voltage and current variables, Hybrid Distribution Transformers (HDTs) have emerged as a viable alternative. Combining a conventional low-frequency transformer with a power converter, HDTs enable the partial control of voltage and current, resulting in lower power loss and reduced construction costs compared to SSTs [13,14]. Furthermore, HDTs offer a fail-safe mechanism through a switch that isolates the converter in case of failure, allowing operation solely via the LFT, thus ensuring compatibility with existing protection systems [11].
+In the literature, there are multiple HDT configurations proposed, leading to various converter topologies being applied [14]. In general, there are two types of configurations, those that operate on one side of the transformer and those that operate on both sides of the LFT. One proposal involves the implementation of a series-connected back-to-back converter on the medium-voltage (MV) side of the LFT, aiming to provide voltage compensation for load variations in the grid [15]. A system with a multilevel back-to-back converter implemented on the MV side of the transformer is presented in [16], indicating a broader voltage control range, smaller filter sizes, and a simpler control sequence. An HDT with a matrix converter connected on the low-voltage (LV) side of the LFT is presented in [17]; this system allows for balanced and unbalanced sag and swell compensation, reduction in harmonic distortion, and power factor correction.
+In [18], a back-to-back converter with a DC link powered by PV energy operates on both sides of the transformer. In this case, a multi-layer fault-tolerant protection strategy for HDT-PVs is analyzed. In [19], a quasi-proportional-resonant control is presented for an HDT composed of a converter on the low-voltage side of the transformer connected through auxiliary windings; this system enables voltage control in loads during variations and compensates for current distortions. In [20], an improved HDT topology is presented, consisting of a converter connected on both sides of the transformer. On the mediumvoltage side, a series-connected converter is connected to the grid, while on the low-voltage side, another converter is connected to an auxiliary winding. Both converters share a DC link, and this HDT features a compound controller, which enhances system robustness while mitigating voltage and current variations, both in cases of symmetry and asymmetry. Another HDT configuration is presented in [21], where a double connection to the transformer is established. A series-connected converter is attached to the higher-voltage side, while a parallel-connected converter is on the lower-voltage side; this configuration aims to reduce current distortion reaching the transformer by compensating for the current
+
+Mathematics 2024, 12, 774
+
+3 of 18
+
+delivered by the converter. This proposal utilizes a discrete-time LQR control, enabling the HDT to contribute to voltage sag and swell control, power factor correction, and current and voltage distortions.
+Using a cascaded h-bridge multilevel converter (CHB-MLI) instead of a voltage source converter can provide two main advantages to an HDT in the MV side. The first is the ability to achieve a higher level of output voltage or to reach the same voltage levels while subjecting the components to lower voltage levels. This is due to the use of two or more modules connected in series instead of just one. The other advantage is the multilevel voltage output of the converter, which can improve the quality of the compensation. An additional advantage of this topology is the autonomy of each module. If one cell has a problem, it can be isolated, and the rest of the modules can continue to operate as if it were a CHB-MLI with a smaller number of modules [22].
+This document presents the HIL implementation of an HDT with a voltage source converter (VSI) and a CHB-MLI connected through a medium-frequency interface to compensate for variations on the voltage grid and the reactive consumption on an LFT. The converters are controlled by an FCS-MPC strategy, where the output models are used and discretized using the forward Euler method. The compensation strategies are made from lineal controllers, and the use of p-q calculation is needed. This technique permits to control the voltage and reactive power at the same time in the same HDT.
+This article is organized as follows. In Section 2, the fundamental aspects of hybrid transformers are presented. Then, in Section 3, the proposed HDT topology is presented, along with its corresponding control strategy. In Section 4, the results obtained that validate the proposal are presented. Finally, Section 5 summarizes the main conclusions of this work.
+
+2. Hybrid Transformer
+Hybrid transformers can be made up of one or more converters arranged to a lowfrequency transformer. This contributes to the control of variables such as voltage or current. It helps to mitigate the effects of changes in voltage, harmonics, or reactive power, especially in the face of small variations in the system [13,17].
+Depending on the configuration used, the HDT can perform specific compensation tasks, so the topology to be used is directly linked to the variables that need to be controlled [14].
+An example of an HDT topology is shown in Figure 1, in which a solid-state transformer made of voltage source converters is connected in parallel to a low-frequency transformer. In this configuration, a converter is connected to the primary side of the low-frequency transformer and can be used to obtain energy from the grid or to provide voltage to the amplitude delivered by the grid, to regulate and ensure the desired voltage on the secondary side of the transformer, even if the grid voltage varies [23]. The converter at the other end is connected to the secondary side of the transformer and can compensate for the load reactive power and can also control the active power to charge the converter DC link or control the current harmonics. All this can be achieved by controlling the output current [24].
+Hybrid Transformer
+
+LFT
+
+MV
+
+LV
+
+grid
+
+grid
+
+AC AC
+Figure 1. HDT configuration.
+
+Mathematics 2024, 12, 774
+
+4 of 18
+
+These type of configuration can obtain their energy from the grid, charging their DC link capacitors using a power control strategy on the converters that perform compensation tasks, or they can be charged from an external energy source, like a removable energy source or a DC microgrid [25], or even a dedicated converter to obtain the energy from the same grid [26,27].
+
+2.1. Proposed Hybrid Transformer
+In the available works, there are different proposals for hybrid transformers, in which the utilities vary according to the topology. For this work, it is proposed to implement a single-phase topology similar to the one presented in Figure 1. However, a modification is made: instead of presenting a standard VSI topology on the higher-voltage side, a cascaded h-bridge multilevel inverter (CHB-MLI) topology is used.
+This topology has the aim of compensating for the voltage in order to maintain a load without variations in the feed and to compensate for the reactive power to reduce the consumption of this type of power, reducing the current that flows through the LFT, and this is done while the DC link is charged from the grid or from an external DC connection.
+A hybrid control strategy is proposed for each compensator, where the converters employ a predictive control loop to generate the modulation, along with linear control for compensation control. These controls do not interfere with the control loops of the other converter. This is done to ensure that each compensator performs its task independently.
+The use of a CHB-MLI on the series compensator side is proposed in order to divide the voltage present between the converters in series, allowing the use of semiconductors that support lower voltage levels or to achieve a higher voltage compensation value. In addition, the modularity of the converter improves reliability since it allows work with an indefinite number of modules, so even if one module of the converter fails, the rest can continue their function, at the cost of decreasing the maximum voltage compensation value.
+In Table 1, a comparison between the characteristics of a traditional LFT and the proposed HDT is presented, highlighting the advantages and disadvantages of each option for use in a distribution network.
+
+Table 1. Comparison between an LFT and proposal.
+
+System LFT
+HDT proposed
+
+Advantajes
+Higher efficiency, completely compatible with current protection systems
+Voltage and reactive power compensation, simultaneous
+compensation, DC grid connection possibility to feed
+energy to the grid
+
+Disadvantages
+Lacks compensation ability
+Efficiency depends on the power converters losses, need extra algorithms to be able to respond to failures that shut
+down the network
+
+The significant contribution of this work lies in the development of a control strategy applied to a Hybrid Distribution Transformer operating with multilevel converters. The proposed strategy enables the simultaneous implementation of two compensation actions without interference between them. From both control and topological perspectives, the proposal offers several advantages, including enhanced output voltage quality compared to topologies with fewer levels, and the ability to harness the benefits of modularity in cascaded converters.
+2.2. Topology
+As mentioned, the proposed hybrid transformer configuration consists of a double compensator system in parallel with a low-frequency transformer (LFT), where the compensators are a CHB-MLI connected in series to the grid on the higher-voltage side of the
+
+Mathematics 2024, 12, 774
+
+5 of 18
+
+LFT, and a voltage source converter in parallel to the loads on the lower-voltage side as shown in Figure 2.
+In addition, each converter have their respective DC link composed of a capacitor, and these DC links are connected to each other through a medium-frequency interface between the converters to provide the necessary galvanic isolation [28], while the shunt converter DC capacitor is used to charge the series converter DC capacitors to keep the multilevel converter energized.
+
+Hybrid
+
+Transformer
+
+LFT
+
+MV grid
+
+LV grid
+
+LC Filter
+
+Series converter
+
+AC DC
+
+Medium frequency interface
+
+DC AC
+
+AC DC
+
+Shunt converter
+DC AC
+
+L Filter
+
+AC DC
+
+DC AC
+
+Possible DC grid conection or DC
+storage
+
+AC DC
+
+DC AC
+
+Figure 2. HDT proposed.
+
+On the low-voltage side, a voltage source converter is connected in parallel to the grid with the ability to control power flow, which aims to compensate for the reactive power consumed by the loads, so the LFT receives only active power consumption. Additionally, the converter is tasked with controlling the DC link voltage to maintain the load levels at the configured values. This converter uses an L filter to connect it to the grid, which allows for a sinusoidal current output.
+Due to these characteristics, the proposed system has the advantages of improved reliability in the event of failures in the series compensator modules, and also allows for the possibility of reaching higher-voltage compensator levels than single-module topologies with the same type of semiconductors. And the system presents the possibility of an external connection for energy from other sources to carry out compensation operations to reduce energy consumption from the main network.
+It is necessary to emphasize that to ensure an improvement in the reliability of the system, a separate study is necessary, which must be carried out considering a modeling and evaluation of the proposal with strategies such as the Monte Carlo method [29], in addition to taking into account the reliability of the same electrical network where the HDT would operate [30].
+
+2.3. Compensator Models 2.3.1. Shunt Compensator Model
+The voltage source converter is composed of an H-bridge that is fed by a capacitor as an energy storage element and is connected to the grid by a L filter in a shunt configuration as shown in Figure 3. The output voltage in the converter depends on the discrete switching function, which is the difference between the values of the switches s1 and s2:
+
+sc(t) = s1(t) − s2(t),
+
+(1)
+
+Mathematics 2024, 12, 774
+
+6 of 18
+
+and the output voltage vo can be expressed as the product from the DC voltage and the
+
+switching function:
+
+vosh(t) = VDCsh(t)sc(t).
+
+(2)
+
+LFT
+
+MV grid
+
+LV grid
+
+Shunt converter
+
++
+
+DC
+
+-
+
+AC
+
+Figure 3. HDT shunt converter.
+Therefore, Table 2 presents the valid switching states for this converter, avoiding combinations that simultaneously activate both semiconductors of one leg of the converter. Such simultaneous activation could lead to a short circuit in the power supply.
+
+Table 2. Valid switching states of a VSC.
+
+State
+
+s1
+
+s2
+
+1
+
+1
+
+0
+
+2
+
+1
+
+1
+
+3
+
+0
+
+0
+
+4
+
+0
+
+1
+
+Voltage Output
+
+sc
+
+VDC
+
+1
+
+0
+
+0
+
+0
+
+0
+
+−VDC
+
+−1
+
+By knowing the valid states of the converter, the voltage levels it can deliver can be obtained in the same way, and with this information, a mathematical model can be obtained that describes the converter’s output coupled to the filter, which can be represented by
+
+dish dt
+
+=
+
+1 L f sh
+
+(VDCsh (t)sc (t)
+
+−
+
+R
+
+f
+
+shish(t)
+
+−
+
+vsec(t)),
+
+(3)
+
+where ish is the output current, L f sh and R f sh are the filter inductance and resistance, and vsec is the secondary-side voltage. This model can be used to implement a model-based control strategy model, such as finite control set model predictive control (FCS-MPC).
+
+Mathematics 2024, 12, 774
+
+7 of 18
+
+2.3.2. Series Compensator Model
+On the medium-voltage side of the LFT, a cascaded multilevel converter is connected in series to the grid and transformer through a LC filter as shown in Figure 4. The objective is to compensate for the voltage provided by the grid to maintain the voltage on the lowvoltage side within the nominal values when variations in the voltage coming from the grid occur.
+LFT
+
+MV grid
+
+LV grid
+
+Series converter
+
+AC
+
++
+
+DC
+
+-
+
+AC
+
++
+
+DC
+
+-
+
+AC
+
++
+
+DC
+
+-
+
+Figure 4. HDT series cascaded converter.
+
+The topology implemented consists of three voltage source converter modules connected in series, which are connected to the grid in series through an LC filter. Each module is fed by a DC link consisting of a capacitor, so each module behaves like a voltage source converter and has the same valid states as presented in Table 2. However, with three modules in series, the output of the converter is the sum of the output voltages of each module. Then, the output current model is:
+
+dise dt
+
+=
+
+1 L f se
+
+(vom1
+
++
+
+vom2
+
++
+
+vom3
+
+−
+
+R
+
+f
+
+se
+
+∗
+
+ise
+
+−
+
+vCse),
+
+(4)
+
+where ise is the converter output current, L f se and R f se are the filter inductance and resis-
+
+tance, vCse is the series capacitor voltage, and vomx is each module output voltage, which
+
+can be obtained using VDCmx as each module DC link and scx as their respective switching
+
+function:
+
+vomx = VDCmxscx
+
+(5)
+
+While the proposed multilevel topology initially involves three modules, the number of modules can be adjusted based on the desired output voltage or the available components. In this system, three modules are used because it is a low number of modules, considering a future physical implementation of the proposal. This also allows the output voltage to be tripled compared to a VSI, and the multilevel output waveform can have up to seven levels
+
+Mathematics 2024, 12, 774
+
+8 of 18
+
+if the DC voltage in the modules is the same. In this case, the output current model can be
+
+simplified as:
+
+dise dt
+
+=
+
+1 L f se
+
+(VDCm scT
+
+−
+
+Rf
+
+seise
+
+−
+
+vCse),
+
+(6)
+
+where now there is only one switching function scT, which is defined as:
+
+scT = sc1 + sc2 + sc3
+
+(7)
+
+The activation of different modules can result in the same total switching function and output voltage, but there are combinations that use three modules to generate the same output which can be achieved with one module; these combinations are not desirable because the efficiency is better when there is only one module active instead of three.In Table 3, the different combinations that a balanced CHB-MLI can have and their respective voltage output and total switching function are presented.
+
+Table 3. CHB-MLI voltage output combinations.
+
+State #
+
+Module 1 Output
+
+Module 2 Output
+
+Module 3 Output
+
+Voltage Output
+
+scT
+
+1
+
+VDC
+
+VDC
+
+VDC
+
+3VDC
+
+3
+
+2
+
+VDC
+
+VDC
+
+0
+
+2VDC
+
+2
+
+3
+
+VDC
+
+0
+
+VDC
+
+2VDC
+
+2
+
+4
+
+0
+
+VDC
+
+VDC
+
+2VDC
+
+2
+
+5
+
+VDC
+
+0
+
+0
+
+VDC
+
+1
+
+6
+
+0
+
+VDC
+
+0
+
+VDC
+
+1
+
+7
+
+0
+
+0
+
+VDC
+
+VDC
+
+1
+
+8
+
+0
+
+0
+
+0
+
+0
+
+0
+
+9
+
+VDC
+
+0
+
+0
+
+−VDC
+
+−1
+
+10
+
+0
+
+VDC
+
+0
+
+−VDC
+
+−1
+
+11
+
+0
+
+0
+
+VDC
+
+−VDC
+
+−1
+
+12
+
+0
+
+VDC
+
+VDC
+
+−2VDC
+
+−2
+
+13
+
+VDC
+
+0
+
+VDC
+
+−2VDC
+
+−2
+
+14
+
+VDC
+
+VDC
+
+0
+
+−2VDC
+
+−2
+
+15
+
+VDC
+
+VDC
+
+VDC
+
+−3VDC
+
+−3
+
+3. Control
+The control strategies to use in an HDT are divided in two: primary control and secondary control. The first is used to maintain each converter output current following a reference, and the second is used to generate the primary control references to generate the voltage and reactive power compensation. A general control scheme is presented in Figure 5.
+On the primary control of each compensator converter, an FCS-MPC strategy is an option that guarantees robust operation and improves the dynamic characteristics for the converters [31].
+
+Mathematics 2024, 12, 774
+
+Series converter
+s1 ... s12
+FCS-MPC CHB-MLI
+
+HDT LFT
+
+Medium frequency interface
+s1 s2 s3 s4 MFT modulation
+
+Shunt converter
+s1 s2 s3 s4 FCS-MPC VSI
+
+9 of 18
+
+Voltage control PLL
+
+PR
+
+sin
+
+X
+
+Reacive power and DC link control
+Power calculation
+
+ec. 18
+
+PI
+
+PI
+
+trasnform.
+
+Figure 5. General control scheme.
+
+3.1. Primary Control
+FCS-MPC is a discrete time control that operates using a system mathematical model to be controlled, where the system input has a finite number of states, which can be leveraged by using the switched model of power converters [32]. For the VSI and CHB-MLI converter, FCS-MPC allows the discrete operation of the semiconductors used in these systems to be utilized since it allows evaluating how the variables to be controlled behave under the different state combinations in each converter switch. This type of strategy allows considering nonlinearities in the system, works over a wide range of operation, and can include operational constraints.
+To implement this control scheme, it is necessary to have the discrete models of the output currents of the converters from Equations (3) and (6), but these have to be discretized via the forward Euler method. Then, the series and shunt converter differential equations can be discretized using the next approximation:
+
+dish = ish(k + 1) − ish(k)
+
+(8)
+
+dt
+
+Ts
+
+Once the models are discrete, the function that defines the output current for each converter is as follows:
+
+ish(k + 1)
+
+=
+
+Ts L f sh
+
+(VDCsh
+
+(k)scsh
+
+(k)
+
+−
+
+R
+
+f
+
+shish
+
+(k)
+
+(9)
+
+−vsec(k)) + ish(k)
+
+Mathematics 2024, 12, 774
+
+10 of 18
+
+ise(k + 1)
+
+=
+
+Ts L f se
+
+(VDCm (k)scseT (k)
+
+−
+
+R
+
+f
+
+se
+
+∗
+
+ise(k)
+
+(10)
+
+−vCse(k)) + ise(k)
+
+With these functions, the FCS-MPC can select the state that delivers the optimal system behavior in each control iteration to maintain the desired converters outputs. A predictive horizon Np = 2 is used to take advantage of the tracking error reduction and to improve the supply quality over a Np = 1 strategy [33]. One disadvantage is that the number of evaluations performed by the algorithm depends on the number of states to be evaluated and the prediction horizon by StatesNp , where a larger prediction horizon leads to an exponential growth in the number of evaluations. Therefore, increasing the prediction horizon results in a computational load that becomes too heavy for a controller to implement in real-time; this is the reason that a longer prediction horizon is not chosen.
+In the case of a series converter that use a balanced three-module cascaded multilevel converter, there is redundancy in the switching states to obtain an output voltage level equal to the DC voltage of one or two modules, or their negative cases as shown in Table 3. These redundant states imply that to obtain a voltage different from 0V, 3VDC, or −3VDC at the converter output, energy can be extracted in an unbalanced way if the predictive control algorithm is left to select the switching state since it tends to use one state more than the other redundant states, which is why an algorithm to balance the energy extraction in these cases is used.
+This algorithm operates by receiving a desired total switching function that can be generated by different states in each case, and it applies those states sequentially, saving the last state used for each output, then in the next cycle that requests the same output voltage, the algorithm checks the memory to know the last stored state and applies the next state in the possible sequence of states to obtain the requested output. Table 4 presents how the next state to apply depends on the scT desired and the last state applied. Thanks to this, all the modules can be activated the same amount of times in a period, and the energy can be equally extracted.
+Once the converters model and balancing algorithm are ready, the primary control is ready to be implemented. The two algorithms will receive the output current reference from a secondary control and will select the best switching combination to achieve the references as shown in Figure 6.
+
+Table 4. CHB-MLI switching sequence.
+
+scT Desired 2 1 −1 −2
+
+Last State # Applied
+2 3 4
+5 6 7
+9 10 11
+12 13 14
+
+State # to Apply
+3 4 2
+6 7 5
+10 11 9
+13 14 12
+
+Voltage Output 2VDC VDC −VDC −2VDC
+
+Mathematics 2024, 12, 774
+
+11 of 18
+
+Start Meassurement:
+ Optimal state out Delay compensation
+Define
+
+No Yes
+
+Start Meassurement:
+ Optimal state out Delay compensation
+Define
+
+No Yes
+
+k+1 prediction
+ eq. 9
+k+2 prediction eq. 9
+
+Yes No
+Yes No
+Next optimal state defined by
+
+k+1 prediction
+ eq. 10
+k+2 prediction eq. 10
+
+Yes No
+Yes No
+Next optimal state defined by
+
+a)
+
+b)
+
+Figure 6. FSC-MPC diagrams of (a) shunt converter, (b) series converter.
+
+3.2. Voltage Control
+To perform voltage control, a proportional resonant (PR) controller is used, which allows error-free steady-state tracking in AC variables and allows tuning around a defined working frequency. The PR control transfer function can be written as follows:
+
+HPR(s)
+
+=
+
+Kpr
+
++
+
+Kr
+
+s2
+
++
+
+2ωo s 2ωos +
+
+ωo2
+
+(11)
+
+where Kpr is the proportional gain, Kr is the resonant gain, and ωo is the grid fundamental frequency.
+The voltage reference to be followed is generated from the product of a unitary sine wave and the amplitude of the expected nominal voltage on the low-voltage side:
+
+√
+
+v∗sec = 2vr∗mssin(2pi fgridθPLL)
+
+(12)
+
+This sine wave signal obtains its generation angle through a EPLL that follows the voltage of the primary winding; consequently, the reference signal becomes synchronized with the voltage of the medium-voltage grid to which the series compensator is connected. Once the reference is obtained, it is compared with the measured voltage on the secondary winding to calculate the error, and then sent to the PR controller, where this control function generates the converter’s reference output current, which is sent to the FCS-MPC:
+
+is∗e = PR(vs∗ec − vsec)
+
+(13)
+
+3.3. Reactive Power and DC Link Control
+To control both variables, a generalized p-q theory is used that allows controlling both variables in a single-phase converter through the alpha–beta transforms of voltage and current to control the reactive power and the load of a DC link [34]. This theory can be used to control active and reactive power flows in the converter, but these power values need to be generated first.
+
+Mathematics 2024, 12, 774
+
+12 of 18
+
+The active power that the converter consumes depends on the DC capacitor charge, then a proportional-integral (PI) control is used to generate the active power reference from the DC capacitor voltage. The PI controller transfer function can be written as:
+
+HPI (s)
+
+=
+
+Kp
+
++
+
+Ki s
+
+(14)
+
+where Kp is the proportional gain, and Ki is the integral gain. With the controller model, the DC voltage control reference can be obtained from the error between the desired and actual DC capacitor voltages:
+
+Vctrl = PI(VD∗Csh − VDCsh)
+
+(15)
+
+The reactive power consumed to the LFT is calculated via alpha–beta theory:
+
+Qsec = vα.sec · iβ.sec + vβ.sec · iα.sec
+
+(16)
+
+With the power consumption calculated, a pi controller can be used to generate the reactive power flow needed from the converter to mitigate this power from the LFT:
+
+Qctrl = PI(Qs∗ec, Qsec)
+
+(17)
+
+With the two types of power flows calculated, the shunt converter current reference can be obtained from the p-q theory as:
+
+is∗h
+
+=
+
+Qctrl vβ.sec + Vctrl vα.sec vα.sec2 + vβ.sec2
+
+(18)
+
+The DC link voltage control loop is a loop that could be eliminated in the case of having an external power supply path, such as a DC microgrid or an additional converter dedicated to the DC link load. This would prevent power recirculation through the LFT. In the event that this occurs, the DC capacitor voltage control can be eliminated without affecting reactive power compensation.
+An additional active power control loop can be incorporated into the secondary control strategies as long as there is an energy storage element with sufficient capabilities or an external power supply in the DC link of the converters. This additional control loop would allow the HDT to contribute with inertia in case the grid in which it works has a low percentage of synchronous generators, thereby improving its capability to provide auxiliary services.
+
+3.4. MFT Control
+The shunt VSI of the system is responsible for keeping its DC link charged through its secondary control. However, the DC links of the CHB-MLI modules must also be charged in the same way. Therefore, the intermediate converters take energy from the shunt converter’s DC link and transfer it to the three DC links of the series converter through the MFT.
+To perform this energy transfer, a modulation is used at a frequency of 20 kHz, where the converter on the side that delivers the energy acts as an inverter, supplying the three MFTs, and the converters of each module receive energy from each transformer, acting as rectifiers and charging the capacitors of the series compensator.
+
+3.5. Start Sequence
+The proposed system presents the control of three key variables: voltage compensation, reactive power compensation and charging of the DC capacitors. If the system needs to obtain the energy from the network, the first thing that must be performed is to charge the capacitor of the series compensator, and then charge the capacitors of the series compensator
+
+Mathematics 2024, 12, 774
+
+13 of 18
+through the MFT. This is necessary for the compensators to carry out their activities correctly. To do this, the Vsec PR control and Qsec PI control are limited to zero, and the only active control on the shunt converter is the VDCsh PI control; this works until the DC voltage reach the reference. Once the DC links are loaded, the voltage and reactive power compensator controls start to act to compensate for any undue variation in the system.
+4. Results The results were derived from a Hardware-in-the-Loop (HIL) setup, utilizing the
+MicroLabBox Compact prototyping DS1202 unit from dSpace GmbH (dSPACE, Paderborn, Germany) to implement digital control and the OP4510 real-time digital simulation platform from Opal-RT (OPAL-RT Technologies Inc., Montreal, Quebec, Canada) to simulate the HDT power system. The set-up can be seen in Figure 7.
+
+Oscilloscope MSO1074
+
+OPAL-RT OP4510
+
+dSPACE DS1202
+
+dSPACE Computer
+
+Figure 7. HIL test setup.
+
+In this HIL setup, two tests were conducted to evaluate the responses of both LFT-only and HDT systems: one test under variations of the grid voltage of 15% of its nominal value and another test under impacts of the load consumption of 1 kW and 1 kVAR. These tests demonstrate the performance of HDT in scenarios affecting the low-voltage grid’s voltage and the reactive power delivered by the LFT. The system values for these tests are detailed in Table 5.
+
+Table 5. HDT, grid and load parameters.
+
+Parameter
+Vgrid Vs∗ec VQD∗∗sCesch MTF ratio LTF ratio Rload1 Lload1 Pload1 Qload1 Rload2 Lload2 Pload2 Qload2
+
+Value
+870Vrms 220Vrms 400 V 0 VAR
+1:4 4:1 38.71 Ω 61.59 mH 1000 W 500 VAR 24.2 Ω 77 mH 1000 W 1000 VAR
+
+Parameter
+fs
+Lse RLse Cse CDCse Lsh RLsh CDCsh LLFTpri LLFTsec RLFTpri RLFTsec RLFTmag LLFTmag
+
+Value
+10 kHz 10 mH 0.2 Ω 45 µF 500 µF 15 mH 0.3 Ω 500 µF 0.1 mH 0.05 mH 0.01 Ω 0.005 Ω 3000 Ω 1 MH
+
+Mathematics 2024, 12, 774
+1000 VAR
+
+14 of 18
+4.1. Operation under Load Change To perform the test, a step change was made from a load of 1 kW and 0.5 kVAR to one
+of 2 kW and 1.5 kVAR, and the LFT results are shown in Figure 8a, where it can be observed that when there is a change in reactive power consumption, it results in a 1000 VAR increase, while the current amplitude increases from 7 [A] to 16 [A].
+The HDT results are shown in Figure 8b; here, it can be seen that in the start, the reactive power is around 0 VAR because the shunt converter is compensating for the reactive power consumption, and when the change is made, the converter and secondary side LFT current increase since the load consumes more energy and more reactive power compensation is needed. The DC voltage is maintained at 400 V and is widely affected by the charge. The reactive power goes up to 200 VAR, but 400 ms after the connection is reduced by the control to around 100 VAR, so the control generates a 1600 VAR compensation in contrast to the LFT performance.
+500 V
+25 A
+
+25 A
+
+1000 VAR 25 A
+
+Figure 8. System response to a 1000 W and 1000 VAR impact in charge: (a) LFT-only response. (b) HDT response.
+4.2. Operation under Voltage Variations
+In this case, results are presented under a 15% voltage sag while the low-voltage network supplies load 1. Figure 9a shows the voltage behavior in the primary and secondary sides of the LFT without converters. In this case, the voltage sag in the primary side is the same in the secondary side of the LFT, where the voltage amplitude falls and an error of 45 V is generated. In Figure 9b, the results of the sag on the HDT are presented; in this case, the secondary voltage can be observed to have a small disturbance at the sag time, then the series compensator starts their function and adds to the grid the voltage dropped. The error can be seen to have a peak of 70 V, but is mitigated under the time, making a zero-around error after 80 ms.
+The final test presents the transformer performance under a 15% voltage swell. In Figure 10a, the LFT results show a similar behavior to the sag result; in this case, the 15% swell is seen on the secondary side of the LFT, and an error of 45 V is present again, the difference being that the error phase can be seen in a 180° phase, which means the voltage is over the reference value.
+On the other side, Figure 10b shows the HDT results. Here, the swell can be seen only on the primary voltage. The secondary voltage has a small distortion, and after 80 ms, the error is mitigated. The series compensator voltage can be seen in the 180° phase, or negative amplitude, to the primary grid; in this form, the compensator can decrease the voltage to maintain the 220 Vrms in the secondary side.
+
+Mathematics 2024, 12, 774
+2000 V
+
+15 of 18
+In the last two tests, it can be observed how variations of 15% in the nominal voltage are implemented, resulting in an amplitude change of 185 [V], and this change is effectively compensated for by the CHB-MLI, while all their modules have a voltage of 100 [V]. In this topology, each module individually possesses a lower capacity than required for the converter’s compensation. However, when all modules work together, the output capacity meets the voltage requirements.
+2000 V
+
+500 V 50 V
+
+500 V 50 V
+200 V
+
+Figure 9. System response to a 15% sag in the primary grid: (a) LFT-only response. (b) HDT response.
+
+2000 V
+
+2000 V
+
+500 V 50 V
+
+500 V 50 V
+200 V
+
+Figure 10. System response to a 15% swell in the primary grid: (a) LFT-only response. (b) HDT response.
+5. Conclusions
+This paper evaluates the operation of an HDT designed to supply secondary loads and compensate for voltage and reactive power fluctuations at the Point of Common Coupling (PCC). The approach integrates predictive control strategies alongside linear PI and PR control techniques to effectively manage the converters in the HDT. The proposed HDT system features a CHB-MLI on the medium-voltage side, medium-frequency transformers, and a conventional inverter on the low-voltage side.
+This study assesses the voltage and reactive power compensation capabilities of the proposed HDT using HIL simulation. The HDT power converters employ FCS-MPC schemes with an extended horizon to regulate their outputs. For voltage compensation,
+
+Mathematics 2024, 12, 774
+
+16 of 18
+
+a PR control strategy is implemented to maintain the secondary voltage within specified limits. In addressing reactive power compensation, a p-q calculation is performed, enabling a PI control to effectively achieve compensation. The parameters used in all tests are consistent and detailed in Table 5.
+The HIL results demonstrate that the implemented system effectively compensates for voltage variations, primarily due to the use of a CHB-MLI topology, its predictive control scheme, and the linear control approach. This combination of technologies eliminates steady-state error, ensuring adherence to the specified voltage reference and maintaining a constant voltage amplitude output from the transformer. The advantage of the topology used is a greater output voltage range over a single module topology, where it can be seen that with a DC voltage of 100 V per module, drops of an amplitude voltage of 185 V can be compensated for, while for a single module topology, the DC voltage would need to be increased.
+Moreover, the VSI enables accurate compensation for the reactive power consumed by loads. Tests indicate a significant reduction in consumption, from 1700 VAR to 100 VAR, when measuring towards the LFT, resulting in an approximate 94% decrease.
+The voltage compensation strategy also proves fully compatible with DC link voltage control. During tests, the voltage consistently remained at the reference value of 400 V, showing no variations even during contingencies, thus ensuring the effective operation of the compensators.
+The proposed topology and control enable independent behavior of both compensators, where each compensation action does not have a negative impact on the performance of the other converter. This allows collaborative efforts in which actions can be taken to mitigate variations in both voltage and reactive power consumption simultaneously.
+While the developed proposal successfully achieves the compensation actions it aims for, further studies are needed to assess the practical effectiveness, reliability and grid compatibility of the proposed HDT system, such as the experimental implementation of a prototype. Furthermore, future studies will be crucial to transition this proposal into a development that is commercially viable and can be operational within distribution grids. These studies should cover areas such as environmental impact, regulatory compliance, and economic considerations to fully assess the feasibility of implementing the proposal as a market-ready product.
+Author Contributions: Conceptualization, E.I.M. and C.R.B.; methodology, E.I.M.; software, M.A.; validation, R.O.R., C.A.M. and M.A.P.; formal analysis, E.I.M.; investigation, E.I.M.; resources, C.R.B. and M.A.P.; data curation, E.I.M.; writing—original draft preparation, E.I.M.; writing—review and editing, C.R.B.; visualization, R.O.R.; supervision, C.R.B.; project administration, C.R.B.; funding acquisition, C.R.B. All authors have read and agreed to the published version of the manuscript.
+Funding: This research was mainly supported by two funding sources: the Fondecyt Project 1201308, and a grant from the Council of Andalucía (Junta de Andalucía, Consejería de Transformación Económica, Industria, Conocimiento y Universidades, Secretaría General de Universidades, Investigación y Tecnología) under Project ProyExcel_00381. Additional support was provided by the Thematic Network RIBIERSE-CYTED (723RT0150) and the Fondecyt Project 1211826.
+Data Availability Statement: Data are contained within the article.
+Acknowledgments: The support of the Energy Conversion Technology Center of the University of Talca, the Advanced Center for Electrical and Electronics Engineering AC3E (Conicyt/FB0008), and the Chilean Solar Energy Research Center (Conicyt/FONDAP/15110019) is gratefully acknowledged.
+Conflicts of Interest: The authors declare no conflicts of interest.
+References
+1. Fuchs, E.; Masoum, M. Power Quality in Power Systems and Electrical Machines; Academic Press: Cambridge, MA, USA, 2008. [CrossRef]
+2. Singh, B.; Chandra, A.; Al-Haddad, K. Power Quality Problems and Mitigation Techniques; John Wiley & Sons Ltd.: Hoboken, NJ, USA, 2015; Volume 9781118922057, pp. 1–582. [CrossRef]
+
+Mathematics 2024, 12, 774
+
+17 of 18
+
+3. Gönen, T. Electric Power Distribution Engineering; CRC Press: Boca Raton, FL, USA, 2014; p. 1049. 4. Divan, D.; Moghe, R.; Prasai, A. Power electronics at the grid edge: The key to unlocking value from the smart grid. IEEE Power
+Electron. Mag. 2014, 1, 16–22. [CrossRef] 5. Kefalas, T.D.; Kladas, A.G. Harmonic impact on distribution transformer no-load loss. IEEE Trans. Ind. Electron. 2010, 57, 193–200.
+[CrossRef] 6. Das, B.P.; Radakovic, Z. Is transformer kVA derating always required under harmonics? A manufacturer’s perspective. IEEE
+Trans. Power Deliv. 2018, 33, 2693–2699. [CrossRef] 7. Divan, D.; Kandula, P. Distributed Power Electronics: An Enabler for the Future Grid. Cpss Trans. Power Electron. Appl. 2016,
+1, 57–65. [CrossRef] 8. Liang, C.; Luo, L.; Li, Y.; Xu, J.; Qi, Q.; Chen, Y.; Zhou, G.; Deng, M. An Integrated Harmonic-Filtering Transformer for
+Low-Voltage Distribution Systems. IEEE Trans. Magn. 2015, 51, 8402204. [CrossRef] 9. Liserre, M.; Buticchi, G.; Andresen, M.; De Carne, G.; Costa, L.F.; Zou, Z.X. The Smart Transformer: Impact on the Electric Grid
+and Technology Challenges. IEEE Ind. Electron. Mag. 2016, 10, 46–58. [CrossRef] 10. Abu-Siada, A.; Budiri, J.; Abdou, A.F. Solid state transformers topologies, controllers, and applications: State-of-the-art literature
+review. Electronics 2018, 7, 298. [CrossRef] 11. Huber J. E..; Kolar J. W. Applicability of Solid-State Transformers in Today’s and Future Distribution Grids. IEEE Trans. Smart
+Grid 2019, 10, 317–326. [CrossRef] 12. Zheng, L.; Marellapudi, A.; Chowdhury, V.R.; Bilakanti, N.; Kandula, R.P.; Saeedifard, M.; Grijalva, S.; Divan, D. Solid-State
+Transformer and Hybrid Transformer With Integrated Energy Storage in Active Distribution Grids: Technical and Economic Comparison, Dispatch, and Control. IEEE J. Emerg. Sel. Top. Power Electron. 2022, 10, 3771–3787. [CrossRef] 13. Burkard, J.; Biela, J. Evaluation of topologies and optimal design of a hybrid distribution transformer. In Proceedings of the 2015 17th European Conference on Power Electronics and Applications, EPE-ECCE Europe 2015, Geneva, Switzerland, 8–10 September 2015. [CrossRef] 14. Carreno, A.; Perez, M.; Baier, C.; Huang, A.; Rajendran, S.; Malinowski, M. Configurations, power topologies and applications of hybrid distribution transformers. Energies 2021, 14, 1215. [CrossRef] 15. Lee, H.J.; Yoon, S.W.; Yoon, Y.D. Hybrid Distribution Transformer Based on an Existing Distribution Transformer and a Series-Connected Power Converter. IEEE Trans. Power Deliv. 2022, 37, 4202–4211. [CrossRef] 16. Yun, C.G.; Cho, Y. Active hybrid solid state transformer based on multi-level converter using SiC MOSFET. Energies 2019, 12, 66. [CrossRef] 17. Costa, P.; Paraíso, G.; Pinto, S.F.; Silva, J.F. A four-leg matrix converter based hybrid distribution transformer for smart and resilient grids. Electr. Power Syst. Res. 2022, 203, 107650. [CrossRef] 18. Zhang, L.; Liu, Y.; Wang, Y.; Liang, D.; Kong, Z.; Wen, Q.; Liu, H.; Gao, Y.; Wu, Z.; Wang, C.; et al. Multi-Layer Fault-Tolerant Protection Strategies for Hybrid Distribution Transformers Integrated Photovoltaic Systems. IEEE Trans. Ind. Appl. 2023, 59, 3098–3109. [CrossRef] 19. Liu, Y.; Zhang, L.; Liang, D.; Jin, H.; Li, S.; Jia, S.; Li, J.; Liu, H.; Wang, Y.; Zhou, K.; et al. Quasi-Proportional-Resonant Control for the Hybrid Distribution Transformer With LCL-Type Converters. IEEE Trans. Ind. Appl. 2022, 58, 6368–6385. [CrossRef] 20. Liu, Y.; Liang, D.; Kou, P.; Zhang, M.; Cai, S.; Zhou, K.; Liang, Y.; Chen, Q.; Yang, C. Compound Control System of Hybrid Distribution Transformer. IEEE Trans. Ind. Appl. 2020, 56, 6360–6373. [CrossRef] 21. Carreno, A.; Malinowski, M.; Perez, M.A.; Baier, C.R. Circulating Active Power Flow Analysis in a Hybrid Transformer With the Series Converter Connected to the Primary Side. IEEE Trans. Ind. Electron. 2024, 1–10. [CrossRef] 22. Malinowski, M.; Gopakumar, K.; Rodriguez, J.; Pérez, M.A. A Survey on Cascaded Multilevel Inverters. IEEE Trans. Ind. Electron. 2010, 57, 2197–2206. [CrossRef] 23. Kaniewski, J.; Fedyczak, Z.; Benysek, G. AC voltage sag/swell compensator based on three-phase hybrid transformer with buck-boost matrix-reactance chopper. IEEE Trans. Ind. Electron. 2014, 61, 3835–3846. [CrossRef] 24. Radi, M.A.; Darwish, M. Var control considerations for the design of hybrid distribution transformers. IET Semin. Dig. 2015, 2015, pp. 1–9. [CrossRef] 25. Zhang, L.; Liu, Y.; Liang, D.; Kou, P.; Wang, Y.; Gao, Y.; Li, D.; Liu, H. Local and Remote Cooperative Control of Hybrid Distribution Transformers Integrating Photovoltaics in Active Distribution Networks. IEEE Trans. Sustain. Energy 2022, 13, 2012–2026. [CrossRef] 26. Carreno, A.; Perez, M.; Baier, C.; Espinoza, J. Modeling and Control of a Hybrid Transformer based on a Cascaded H-bridge Multilevel Converter. In Proceedings of the IECON Proceedings (Industrial Electronics Conference), Singapore, 18–21 October 2020; pp. 1614–1619. [CrossRef] 27. Liu, Y.; Liang, D.; Wang, Y.; Kou, P.; Zhou, K.; Li, D.; Zhang, L.; Gao, Y.; Cai, S.; Wen, Q.; et al. Power Flow Analysis and DC-link Voltage Control of Hybrid Distribution Transformer. IEEE Trans. Power Electron. 2021, 36, 12579–12595. [CrossRef] 28. Ferreira Costa, L.; De Carne, G.; Buticchi, G.; Liserre, M. The Smart Transformer: A solid-state transformer tailored to provide ancillary services to the distribution grid. IEEE Power Electron. Mag. 2017, 4, 56–67. [CrossRef] 29. Liu, Y.; Peng, H.; Yang, Y. Reliability Modeling and Evaluation Method of CNC Grinding Machine Tool. Appl. Sci. 2019, 9, 14. [CrossRef]
+
+Mathematics 2024, 12, 774
+
+18 of 18
+
+30. Migisha, A.G.; Ntayi, J.M.; Buyinza, F.; Senyonga, L.; Abaliwano, J.; Adaramola, M.S. Review of Concepts and Determinants of Grid Electricity Reliability. Energies 2023, 16, 7220. [CrossRef]
+31. Vazquez, S.; Leon, J.I.; Franquelo, L.G.; Rodriguez, J.; Young, H.A.; Marquez, A.; Zanchetta, P. Model predictive control: A review of its applications in power electronics. IEEE Ind. Electron. Mag. 2014, 8, 16–31. [CrossRef]
+32. Rodríguez, J.; Pontt, J.; Silva, C.; Cortés, P.; Amman, U.; Rees, S. Predictive current control of a voltage source inverter. PESC Record-IEEE Annu. Power Electron. Spec. Conf. 2004, 3, 2192–2196. [CrossRef]
+33. Geyer, T.; Quevedo, D.E. Multistep finite control set model predictive control for power electronics. IEEE Trans. Power Electron. 2014, 29, 6836–6846. [CrossRef]
+34. Khadkikar, V.; Chandra, A.; Singh, B.N. Generalised single-phase p-q theory for active power filtering: Simulation and DSP-based experimental investigation. IET Power Electron. 2009, 2, 67–78. [CrossRef]
+Disclaimer/Publisher’s Note: The statements, opinions and data contained in all publications are solely those of the individual author(s) and contributor(s) and not of MDPI and/or the editor(s). MDPI and/or the editor(s) disclaim responsibility for any injury to people or property resulting from any ideas, methods, instructions or products referred to in the content.
+
+

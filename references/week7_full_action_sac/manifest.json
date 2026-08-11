@@ -1,0 +1,110 @@
+[
+  {
+    "file": "awac_accelerating_online_rl_with_offline_datasets_arxiv2006.09359.pdf",
+    "pages": 17,
+    "text_chars": 81307,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/awac_accelerating_online_rl_with_offline_datasets_arxiv2006.09359.txt"
+  },
+  {
+    "file": "bcq_off_policy_deep_rl_without_exploration_icml2019.pdf",
+    "pages": 11,
+    "text_chars": 55181,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/bcq_off_policy_deep_rl_without_exploration_icml2019.txt"
+  },
+  {
+    "file": "brac_behavior_regularized_actor_critic_arxiv1911.11361.pdf",
+    "pages": 25,
+    "text_chars": 46712,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/brac_behavior_regularized_actor_critic_arxiv1911.11361.txt"
+  },
+  {
+    "file": "combo_conservative_offline_model_based_policy_optimization_neurips2021.pdf",
+    "pages": 14,
+    "text_chars": 55645,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/combo_conservative_offline_model_based_policy_optimization_neurips2021.txt"
+  },
+  {
+    "file": "continuous_soft_actor_critic_time_discretization_neurips2025.pdf",
+    "pages": 37,
+    "text_chars": 95836,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/continuous_soft_actor_critic_time_discretization_neurips2025.txt"
+  },
+  {
+    "file": "cpo_constrained_policy_optimization_arxiv1705.10528.pdf",
+    "pages": 18,
+    "text_chars": 56339,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/cpo_constrained_policy_optimization_arxiv1705.10528.txt"
+  },
+  {
+    "file": "cql_conservative_q_learning_offline_rl_neurips2020.pdf",
+    "pages": 13,
+    "text_chars": 54763,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/cql_conservative_q_learning_offline_rl_neurips2020.txt"
+  },
+  {
+    "file": "dr_sac_distributionally_robust_soft_actor_critic_arxiv2506.12622.pdf",
+    "pages": 31,
+    "text_chars": 87145,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/dr_sac_distributionally_robust_soft_actor_critic_arxiv2506.12622.txt"
+  },
+  {
+    "file": "dsac_t_distributional_soft_actor_critic_three_refinements_arxiv2310.05858.pdf",
+    "pages": 12,
+    "text_chars": 61246,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/dsac_t_distributional_soft_actor_critic_three_refinements_arxiv2310.05858.txt"
+  },
+  {
+    "file": "iql_implicit_q_learning_offline_rl_arxiv2110.06169.pdf",
+    "pages": 13,
+    "text_chars": 47620,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/iql_implicit_q_learning_offline_rl_arxiv2110.06169.txt"
+  },
+  {
+    "file": "mopo_model_based_offline_policy_optimization_neurips2020.pdf",
+    "pages": 14,
+    "text_chars": 55691,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/mopo_model_based_offline_policy_optimization_neurips2020.txt"
+  },
+  {
+    "file": "morel_model_based_offline_reinforcement_learning_neurips2020.pdf",
+    "pages": 14,
+    "text_chars": 52182,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/morel_model_based_offline_reinforcement_learning_neurips2020.txt"
+  },
+  {
+    "file": "pets_probabilistic_ensembles_trajectory_sampling_neurips2018.pdf",
+    "pages": 12,
+    "text_chars": 48280,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/pets_probabilistic_ensembles_trajectory_sampling_neurips2018.txt"
+  },
+  {
+    "file": "sac_algorithms_and_applications_arxiv1812.05905.pdf",
+    "pages": 17,
+    "text_chars": 58116,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/sac_algorithms_and_applications_arxiv1812.05905.txt"
+  },
+  {
+    "file": "sac_maximum_entropy_deep_rl_arxiv1801.01290.pdf",
+    "pages": 14,
+    "text_chars": 52045,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/sac_maximum_entropy_deep_rl_arxiv1801.01290.txt"
+  },
+  {
+    "file": "sacr2_sac_with_reward_relabeling_arxiv2110.14464.pdf",
+    "pages": 13,
+    "text_chars": 36643,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/sacr2_sac_with_reward_relabeling_arxiv2110.14464.txt"
+  },
+  {
+    "file": "td3_bc_minimalist_offline_rl_arxiv2106.06860.pdf",
+    "pages": 19,
+    "text_chars": 60710,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/td3_bc_minimalist_offline_rl_arxiv2106.06860.txt"
+  },
+  {
+    "file": "trpo_trust_region_policy_optimization_arxiv1502.05477.pdf",
+    "pages": 16,
+    "text_chars": 59432,
+    "extracted_text": "references/week7_full_action_sac/extracted_text/trpo_trust_region_policy_optimization_arxiv1502.05477.txt"
+  }
+]

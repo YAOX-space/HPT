@@ -1,0 +1,3 @@
+model,target,rmse,mae
+proxy2_lite_autoregressive,lv_pu_inst,0.024201433256377504,0.019122878166272374
+proxy2_lite_autoregressive,vdc_pu_inst,0.41224953755383087,0.37135413113697197

@@ -1,0 +1,8 @@
+{
+  "schema": "hpt_proxy_calibration_v1",
+  "frt_validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+  "frt_calibration_status": "requires_recalibration",
+  "target_gate": "L1",
+  "topologies": {},
+  "archived_source": "archive/pre_gbt_v3_20260803/global/proxy/hpt_proxy_calibration.json"
+}

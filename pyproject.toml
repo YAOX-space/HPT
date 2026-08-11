@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hpt-frt"
+version = "0.2.0"
+description = "Hybrid Power Transformer fault ride-through control: device-level online-gated multi-expert SAC (Mode 5) + IEEE-33 network robustness stress test (OpenDSS + Simulink L1 spot-check)"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Proprietary / research" }
+dependencies = [
+    "numpy<2",
+    "scipy>=1.10,<1.11",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "gymnasium>=0.29",
+    "stable-baselines3>=2.3",
+    "torch>=2.2",
+    "opendssdirect.py>=0.8",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"hpt_frt.network" = ["ieee33.dss"]      # feeder shipped with the package (config.DSS_FILE)
+
+# Layout (see docs/FILE_GUIDE.md):
+#   src/hpt_frt/device/   Phase-1 device-level FRT (training envs, SAC experts/residual, Simulink export)
+#   src/hpt_frt/network/  Phase-2 IEEE-33 network robustness stress test (OpenDSS + studies + L1 fill)
+#   lab/                  MATLAB switching-level model (hpt_frt_full.slx) + scenarios + validated results
+#   data/models/          trained SAC .zip (gitignored)
+#   docs/  references/     documentation + literature
+
+[tool.pytest.ini_options]
+markers = ["slow: marks slow integration tests (deselect with '-m \"not slow\"')"]

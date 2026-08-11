@@ -1,0 +1,75 @@
+! IEEE 33-bus radial distribution feeder (Baran & Wu 1989), 12.66 kV, 3.715 MW / 2.30 Mvar
+! Self-check anchors (canonical dataset): min V = 0.9038 pu @ bus 18, total losses = 210.98 kW.
+Clear
+New Circuit.ieee33 basekv=12.66 pu=1.0 phases=3 bus1=1 MVAsc3=500000 MVAsc1=500000
+
+! ---- lines: R/X in ohms (length=1, units=none -> r1/x1 are totals) ----
+New Line.L01 bus1=1  bus2=2  r1=0.0922 x1=0.0477 r0=0.0922 x0=0.0477 c1=0 c0=0 length=1
+New Line.L02 bus1=2  bus2=3  r1=0.4930 x1=0.2511 r0=0.4930 x0=0.2511 c1=0 c0=0 length=1
+New Line.L03 bus1=3  bus2=4  r1=0.3660 x1=0.1864 r0=0.3660 x0=0.1864 c1=0 c0=0 length=1
+New Line.L04 bus1=4  bus2=5  r1=0.3811 x1=0.1941 r0=0.3811 x0=0.1941 c1=0 c0=0 length=1
+New Line.L05 bus1=5  bus2=6  r1=0.8190 x1=0.7070 r0=0.8190 x0=0.7070 c1=0 c0=0 length=1
+New Line.L06 bus1=6  bus2=7  r1=0.1872 x1=0.6188 r0=0.1872 x0=0.6188 c1=0 c0=0 length=1
+New Line.L07 bus1=7  bus2=8  r1=1.7114 x1=1.2351 r0=1.7114 x0=1.2351 c1=0 c0=0 length=1
+New Line.L08 bus1=8  bus2=9  r1=1.0300 x1=0.7400 r0=1.0300 x0=0.7400 c1=0 c0=0 length=1
+New Line.L09 bus1=9  bus2=10 r1=1.0440 x1=0.7400 r0=1.0440 x0=0.7400 c1=0 c0=0 length=1
+New Line.L10 bus1=10 bus2=11 r1=0.1966 x1=0.0650 r0=0.1966 x0=0.0650 c1=0 c0=0 length=1
+New Line.L11 bus1=11 bus2=12 r1=0.3744 x1=0.1238 r0=0.3744 x0=0.1238 c1=0 c0=0 length=1
+New Line.L12 bus1=12 bus2=13 r1=1.4680 x1=1.1550 r0=1.4680 x0=1.1550 c1=0 c0=0 length=1
+New Line.L13 bus1=13 bus2=14 r1=0.5416 x1=0.7129 r0=0.5416 x0=0.7129 c1=0 c0=0 length=1
+New Line.L14 bus1=14 bus2=15 r1=0.5910 x1=0.5260 r0=0.5910 x0=0.5260 c1=0 c0=0 length=1
+New Line.L15 bus1=15 bus2=16 r1=0.7463 x1=0.5450 r0=0.7463 x0=0.5450 c1=0 c0=0 length=1
+New Line.L16 bus1=16 bus2=17 r1=1.2890 x1=1.7210 r0=1.2890 x0=1.7210 c1=0 c0=0 length=1
+New Line.L17 bus1=17 bus2=18 r1=0.7320 x1=0.5740 r0=0.7320 x0=0.5740 c1=0 c0=0 length=1
+New Line.L18 bus1=2  bus2=19 r1=0.1640 x1=0.1565 r0=0.1640 x0=0.1565 c1=0 c0=0 length=1
+New Line.L19 bus1=19 bus2=20 r1=1.5042 x1=1.3554 r0=1.5042 x0=1.3554 c1=0 c0=0 length=1
+New Line.L20 bus1=20 bus2=21 r1=0.4095 x1=0.4784 r0=0.4095 x0=0.4784 c1=0 c0=0 length=1
+New Line.L21 bus1=21 bus2=22 r1=0.7089 x1=0.9373 r0=0.7089 x0=0.9373 c1=0 c0=0 length=1
+New Line.L22 bus1=3  bus2=23 r1=0.4512 x1=0.3083 r0=0.4512 x0=0.3083 c1=0 c0=0 length=1
+New Line.L23 bus1=23 bus2=24 r1=0.8980 x1=0.7091 r0=0.8980 x0=0.7091 c1=0 c0=0 length=1
+New Line.L24 bus1=24 bus2=25 r1=0.8960 x1=0.7011 r0=0.8960 x0=0.7011 c1=0 c0=0 length=1
+New Line.L25 bus1=6  bus2=26 r1=0.2030 x1=0.1034 r0=0.2030 x0=0.1034 c1=0 c0=0 length=1
+New Line.L26 bus1=26 bus2=27 r1=0.2842 x1=0.1447 r0=0.2842 x0=0.1447 c1=0 c0=0 length=1
+New Line.L27 bus1=27 bus2=28 r1=1.0590 x1=0.9337 r0=1.0590 x0=0.9337 c1=0 c0=0 length=1
+New Line.L28 bus1=28 bus2=29 r1=0.8042 x1=0.7006 r0=0.8042 x0=0.7006 c1=0 c0=0 length=1
+New Line.L29 bus1=29 bus2=30 r1=0.5075 x1=0.2585 r0=0.5075 x0=0.2585 c1=0 c0=0 length=1
+New Line.L30 bus1=30 bus2=31 r1=0.9744 x1=0.9630 r0=0.9744 x0=0.9630 c1=0 c0=0 length=1
+New Line.L31 bus1=31 bus2=32 r1=0.3105 x1=0.3619 r0=0.3105 x0=0.3619 c1=0 c0=0 length=1
+New Line.L32 bus1=32 bus2=33 r1=0.3410 x1=0.5302 r0=0.3410 x0=0.5302 c1=0 c0=0 length=1
+
+! ---- spot loads (kW, kvar), 3-phase wye, constant PQ ----
+New Load.S2  bus1=2  phases=3 kv=12.66 kw=100 kvar=60  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S3  bus1=3  phases=3 kv=12.66 kw=90  kvar=40  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S4  bus1=4  phases=3 kv=12.66 kw=120 kvar=80  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S5  bus1=5  phases=3 kv=12.66 kw=60  kvar=30  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S6  bus1=6  phases=3 kv=12.66 kw=60  kvar=20  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S7  bus1=7  phases=3 kv=12.66 kw=200 kvar=100 model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S8  bus1=8  phases=3 kv=12.66 kw=200 kvar=100 model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S9  bus1=9  phases=3 kv=12.66 kw=60  kvar=20  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S10 bus1=10 phases=3 kv=12.66 kw=60  kvar=20  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S11 bus1=11 phases=3 kv=12.66 kw=45  kvar=30  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S12 bus1=12 phases=3 kv=12.66 kw=60  kvar=35  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S13 bus1=13 phases=3 kv=12.66 kw=60  kvar=35  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S14 bus1=14 phases=3 kv=12.66 kw=120 kvar=80  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S15 bus1=15 phases=3 kv=12.66 kw=60  kvar=10  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S16 bus1=16 phases=3 kv=12.66 kw=60  kvar=20  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S17 bus1=17 phases=3 kv=12.66 kw=60  kvar=20  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S18 bus1=18 phases=3 kv=12.66 kw=90  kvar=40  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S19 bus1=19 phases=3 kv=12.66 kw=90  kvar=40  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S20 bus1=20 phases=3 kv=12.66 kw=90  kvar=40  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S21 bus1=21 phases=3 kv=12.66 kw=90  kvar=40  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S22 bus1=22 phases=3 kv=12.66 kw=90  kvar=40  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S23 bus1=23 phases=3 kv=12.66 kw=90  kvar=50  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S24 bus1=24 phases=3 kv=12.66 kw=420 kvar=200 model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S25 bus1=25 phases=3 kv=12.66 kw=420 kvar=200 model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S26 bus1=26 phases=3 kv=12.66 kw=60  kvar=25  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S27 bus1=27 phases=3 kv=12.66 kw=60  kvar=25  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S28 bus1=28 phases=3 kv=12.66 kw=60  kvar=20  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S29 bus1=29 phases=3 kv=12.66 kw=120 kvar=70  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S30 bus1=30 phases=3 kv=12.66 kw=200 kvar=600 model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S31 bus1=31 phases=3 kv=12.66 kw=150 kvar=70  model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S32 bus1=32 phases=3 kv=12.66 kw=210 kvar=100 model=1 vminpu=0.6 vmaxpu=1.4
+New Load.S33 bus1=33 phases=3 kv=12.66 kw=60  kvar=40  model=1 vminpu=0.6 vmaxpu=1.4
+
+Set VoltageBases=[12.66]
+CalcVoltageBases

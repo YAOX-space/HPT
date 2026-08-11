@@ -1,0 +1,20 @@
+{
+    "generated_at":  "2026-08-11",
+    "source":  "E:\\research_space\\Hybrid-power-transformer",
+    "target":  "E:\\research_space\\HPT2.0",
+    "scope":  "Gate A curated migration: useful source, models, docs, tutorial, compact evidence, and key references only.",
+    "excluded":  [
+                     ".git",
+                     ".venv",
+                     "slprj",
+                     "tmp",
+                     ".pytest_cache",
+                     "bulk archive",
+                     "bulk experts",
+                     "bulk results/control_comparison temporary runs",
+                     "lab/results",
+                     "references.zip duplicate archive"
+                 ],
+    "current_claim":  "No promoted SAC controller under v3 validator; L1 voltage-survival is current trainable gate.",
+    "next_gate":  "Gate B: 24-D / 4-D controller contract audit."
+}

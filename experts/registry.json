@@ -1,0 +1,304 @@
+{
+  "schema": "hpt-v2-expert-registry-v1",
+  "expert_count": 12,
+  "taxonomy": "2 topologies x 2 FRT categories x 3 phase families",
+  "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+  "target_gate": "L1",
+  "phase_equivalence": {
+    "balanced": [
+      "abc"
+    ],
+    "single_phase": [
+      "a",
+      "b",
+      "c"
+    ],
+    "two_phase": [
+      "ab",
+      "bc",
+      "ca"
+    ]
+  },
+  "experts": [
+    {
+      "expert_id": "topology1_balanced_lvrt",
+      "topology": "topology1",
+      "category": "LVRT",
+      "phase_family": "balanced",
+      "representative_phase_key": "abc",
+      "covered_phase_keys": [
+        "abc"
+      ],
+      "workspace": "experts/topology1_balanced_lvrt",
+      "data": "experts/topology1_balanced_lvrt/data",
+      "proxy": "experts/topology1_balanced_lvrt/proxy",
+      "descriptor": "experts/topology1_balanced_lvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology1_balanced_lvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology1_single_phase_lvrt",
+      "topology": "topology1",
+      "category": "LVRT",
+      "phase_family": "single_phase",
+      "representative_phase_key": "a",
+      "covered_phase_keys": [
+        "a",
+        "b",
+        "c"
+      ],
+      "workspace": "experts/topology1_single_phase_lvrt",
+      "data": "experts/topology1_single_phase_lvrt/data",
+      "proxy": "experts/topology1_single_phase_lvrt/proxy",
+      "descriptor": "experts/topology1_single_phase_lvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology1_single_phase_lvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology1_two_phase_lvrt",
+      "topology": "topology1",
+      "category": "LVRT",
+      "phase_family": "two_phase",
+      "representative_phase_key": "ab",
+      "covered_phase_keys": [
+        "ab",
+        "bc",
+        "ca"
+      ],
+      "workspace": "experts/topology1_two_phase_lvrt",
+      "data": "experts/topology1_two_phase_lvrt/data",
+      "proxy": "experts/topology1_two_phase_lvrt/proxy",
+      "descriptor": "experts/topology1_two_phase_lvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology1_two_phase_lvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology1_balanced_hvrt",
+      "topology": "topology1",
+      "category": "HVRT",
+      "phase_family": "balanced",
+      "representative_phase_key": "abc",
+      "covered_phase_keys": [
+        "abc"
+      ],
+      "workspace": "experts/topology1_balanced_hvrt",
+      "data": "experts/topology1_balanced_hvrt/data",
+      "proxy": "experts/topology1_balanced_hvrt/proxy",
+      "descriptor": "experts/topology1_balanced_hvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology1_balanced_hvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology1_single_phase_hvrt",
+      "topology": "topology1",
+      "category": "HVRT",
+      "phase_family": "single_phase",
+      "representative_phase_key": "a",
+      "covered_phase_keys": [
+        "a",
+        "b",
+        "c"
+      ],
+      "workspace": "experts/topology1_single_phase_hvrt",
+      "data": "experts/topology1_single_phase_hvrt/data",
+      "proxy": "experts/topology1_single_phase_hvrt/proxy",
+      "descriptor": "experts/topology1_single_phase_hvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology1_single_phase_hvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology1_two_phase_hvrt",
+      "topology": "topology1",
+      "category": "HVRT",
+      "phase_family": "two_phase",
+      "representative_phase_key": "ab",
+      "covered_phase_keys": [
+        "ab",
+        "bc",
+        "ca"
+      ],
+      "workspace": "experts/topology1_two_phase_hvrt",
+      "data": "experts/topology1_two_phase_hvrt/data",
+      "proxy": "experts/topology1_two_phase_hvrt/proxy",
+      "descriptor": "experts/topology1_two_phase_hvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology1_two_phase_hvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology2_balanced_lvrt",
+      "topology": "topology2",
+      "category": "LVRT",
+      "phase_family": "balanced",
+      "representative_phase_key": "abc",
+      "covered_phase_keys": [
+        "abc"
+      ],
+      "workspace": "experts/topology2_balanced_lvrt",
+      "data": "experts/topology2_balanced_lvrt/data",
+      "proxy": "experts/topology2_balanced_lvrt/proxy",
+      "descriptor": "experts/topology2_balanced_lvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology2_balanced_lvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology2_single_phase_lvrt",
+      "topology": "topology2",
+      "category": "LVRT",
+      "phase_family": "single_phase",
+      "representative_phase_key": "a",
+      "covered_phase_keys": [
+        "a",
+        "b",
+        "c"
+      ],
+      "workspace": "experts/topology2_single_phase_lvrt",
+      "data": "experts/topology2_single_phase_lvrt/data",
+      "proxy": "experts/topology2_single_phase_lvrt/proxy",
+      "descriptor": "experts/topology2_single_phase_lvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology2_single_phase_lvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology2_two_phase_lvrt",
+      "topology": "topology2",
+      "category": "LVRT",
+      "phase_family": "two_phase",
+      "representative_phase_key": "ab",
+      "covered_phase_keys": [
+        "ab",
+        "bc",
+        "ca"
+      ],
+      "workspace": "experts/topology2_two_phase_lvrt",
+      "data": "experts/topology2_two_phase_lvrt/data",
+      "proxy": "experts/topology2_two_phase_lvrt/proxy",
+      "descriptor": "experts/topology2_two_phase_lvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology2_two_phase_lvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology2_balanced_hvrt",
+      "topology": "topology2",
+      "category": "HVRT",
+      "phase_family": "balanced",
+      "representative_phase_key": "abc",
+      "covered_phase_keys": [
+        "abc"
+      ],
+      "workspace": "experts/topology2_balanced_hvrt",
+      "data": "experts/topology2_balanced_hvrt/data",
+      "proxy": "experts/topology2_balanced_hvrt/proxy",
+      "descriptor": "experts/topology2_balanced_hvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology2_balanced_hvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology2_single_phase_hvrt",
+      "topology": "topology2",
+      "category": "HVRT",
+      "phase_family": "single_phase",
+      "representative_phase_key": "a",
+      "covered_phase_keys": [
+        "a",
+        "b",
+        "c"
+      ],
+      "workspace": "experts/topology2_single_phase_hvrt",
+      "data": "experts/topology2_single_phase_hvrt/data",
+      "proxy": "experts/topology2_single_phase_hvrt/proxy",
+      "descriptor": "experts/topology2_single_phase_hvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology2_single_phase_hvrt/archive/pre_gbt_v3_20260803"
+    },
+    {
+      "expert_id": "topology2_two_phase_hvrt",
+      "topology": "topology2",
+      "category": "HVRT",
+      "phase_family": "two_phase",
+      "representative_phase_key": "ab",
+      "covered_phase_keys": [
+        "ab",
+        "bc",
+        "ca"
+      ],
+      "workspace": "experts/topology2_two_phase_hvrt",
+      "data": "experts/topology2_two_phase_hvrt/data",
+      "proxy": "experts/topology2_two_phase_hvrt/proxy",
+      "descriptor": "experts/topology2_two_phase_hvrt/expert.json",
+      "current_model": null,
+      "current_result": null,
+      "current_data_manifest": null,
+      "current_proxy_calibration": null,
+      "promotion_status": "archived_pre_v3_revalidation_required",
+      "validator_schema": "hpt-frt-gates-v3-gbt19963.1",
+      "target_gate": "L1",
+      "latest_archive": "experts/topology2_two_phase_hvrt/archive/pre_gbt_v3_20260803"
+    }
+  ]
+}
